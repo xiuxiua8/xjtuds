@@ -1,0 +1,621 @@
+
+%\documentclass[11pt]{article} %指定文档的类型和基本格式。这里选择了article类，字体大小为11磅。
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath,textcomp,amssymb,geometry,graphicx,enumerate} %加载了一些宏包，这些宏包提供了额外的功能和格式设定，例如数学符号、文本特殊符号、排版布局等。
+
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage{xeCJK} % Added for Chinese support
+%\setCJKmainfont{SimSum} % Set the Chinese font, you can change it to any font you have
+
+
+%\def\Name{zilong}
+\def\Name{王子隆}  % Your name 定义了一个名为\Name的变量，它的内容是"PUT SOMETHING HERE"。通常这个变量会在文档中被调用以插入相应的信息。
+\def\SID{2221411126}  % Your student ID number 定义了一个名为\SID的变量，它的内容也是"PUT SOMETHING HERE"。
+\def\Homework{1} % Number of Homework 定义了一个名为\Homework的变量，它的内容是"n"，表示作业编号。
+\def\Session{Autumn 2023} %定义了一个名为\Session的变量，它的内容是"Autumn 2023"，表示学期。
+
+
+\title{DS--Autumn 2023 --- Homework \Homework Solutions} %设置了文档的标题，包括课程名、学期和作业编号。
+\author{\Name, SID \SID} %设置了文档的作者信息，使用了之前定义的\Name和\SID变量。
+\markboth{DS--\Session\  Homework \Homework\ \Name}{DS--\Session\ Homework \Homework\ \Name} %设置了页眉的内容。
+\pagestyle{myheadings} %设置了页眉的内容。
+\date{\today} %清空了默认的日期显示。
+
+\newenvironment{qparts}{\begin{enumerate}[{(}a{)}]}{\end{enumerate}} %定义了一个新的环境qparts，用于创建带有小括号标记的题目部分。
+%\def\endSolutionsmark{$\mathcal{X} \mathcal{I} \mathcal{U} $} %定义了证明结束标记为一个方框符号。
+\newenvironment{Solutions}{\par{\bf Solutions}:}%{\endSolutionsmark\smallskip} %定义了一个新的环境Solutions，用于书写数学证明。
+
+
+\lstdefinestyle{mystyle}{ %%定义了一个样式mystyle，指定了Java语言，设定了代码的基本样式、注释样式、关键词样式等等
+    language=Java,
+    basicstyle=\ttfamily\small, % 设置代码字体为大一些
+    commentstyle=\color{OliveGreen},
+    keywordstyle=\color{RoyalBlue},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4
+}
+
+
+\textheight=9in
+\textwidth=6.5in
+\topmargin=-.75in
+\oddsidemargin=0.25in
+\evensidemargin=0.25in %设置了页面的尺寸和边距。
+
+
+\lstset{style=mystyle}
+
+\begin{document}
+\maketitle
+
+%Collaborators: PUT SOMETHING HERE (LIST OF YOUR COLLABORATORS, OR WRITE NONE)
+
+\begin{abstract}
+    %Abstract goes here...
+    线性表功能实现及应用
+    
+    Merge(L1,L2)
+
+    Dispose (L1, 12)
+
+    Sort (L)
+  
+    Insert(L,a,b) 不/带头链表L,在元素值a之前插入b
+
+    应用 一元多项式的加減法（链表）
+
+
+    %插入元素通过覆盖元素，并且向后增加节点
+
+    检测环形链表证明链表有无环
+
+    增加bool数据类型判断环形链表是否遍历完毕
+
+    hanoi塔
+
+    数据库（交并差叉积）
+    
+    半矩阵存储
+
+\end{abstract}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section*{1. 线性表功能实现及应用}
+\begin{qparts}
+    \item 
+    功能实现
+    
+    Merge(L1,L2)
+
+    Dispose (L1, 12)
+
+    Sort (L)
+  
+    Insert(L,a,b) 不/带头链表L,在元素值a之前插入b
+
+    \item
+    应用 
+    
+    一元多项式的加減法（链表）
+\end{qparts}
+
+\subsection*{1.1 数组、链表、双向循环链表建立}
+
+\begin{Solutions}
+\begin{enumerate} % for numbers
+
+\item 数组
+ArrayDeque.java
+\begin{lstlisting}
+/** Array based list.
+*  @author zilong
+*/
+
+/* Invariants:
+addLast: The next item we want to add, will go into position size
+getLast: The item we want to return is in position size - 1
+size: The number of items in the list should be size.
+*/
+public class ArrayDeque<T> implements List<T>{
+    private T[] items;
+    private int size;
+
+    /** Creates an empty array deque. */
+    public ArrayDeque() {
+        items = (T[]) new Object[8];
+        size = 0;
+    }
+
+    /** Resizes the underlying array to the target capacity. */
+    private void resize(int capacity) {
+        T[] a = (T[]) new Object[capacity];
+        System.arraycopy(items, 0, a, 0, size);
+        items = a;
+    }
+    /** Adds an item of type T to the front of the deque.*/
+    public void addFirst(T item) {
+        if (size == items.length) {
+            //this.resize(size + 1);
+            this.resize(size + 1);
+        }
+        //for (int i = size; i > 0; i--) {
+        //    items[i] = items[i -1 ];
+        //}
+        System.arraycopy(items, 0, items, 1, size);
+        items[0] = item;
+        size = size + 1;
+    }
+
+    /** Inserts X into the back of the list. */
+    public void addLast(T item) {
+        if (size == items.length) {
+            //this.resize(size + 1);
+            this.resize(size + 1);
+        }
+        items[size] = item;
+        size = size + 1;
+    }
+
+
+    /** Returns true if deque is empty, false otherwise.*/
+    public boolean isEmpty() {
+        if (size == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /** Prints the items in the deque from first to last, separated by a space.
+    * Once all the items have been printed, print out a new line.*/
+    public void printDeque() {
+        if (size == 0) {
+            System.out.println("The deque is empty.\n");
+        }
+        for (int i = 0; i < size; i++) {
+            System.out.print(items[i] + " ");
+        }
+        System.out.print("\n");
+    }
+
+    /** Gets the ith item in the list (0 is the front).
+    * If no such item exists, returns null. Must not alter the deque! */
+    public T get(int i) {
+        return  items[i];
+    }
+
+    public T getFirst() {
+        return get(0);
+    }
+
+    public T getLast() {
+        int lastActualItemIndex = size - 1;
+        return items[lastActualItemIndex];
+    }
+
+    /** Returns the number of items in the list. */
+    public int size() {
+        return size;
+    }
+
+    /** Removes and returns the item at the front of the deque.
+    * If no such item exists, returns null. */
+    public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
+        T front = get(0);
+
+
+        //for (int i = 0; i < size - 1; i++) {
+        //    items[i] = items[i + 1];
+        //}
+
+        System.arraycopy(items, 1, items, 0, size - 1);
+
+        items[size - 1] = null; //this may not right.
+
+        size = size - 1;
+        if (size <= items.length * 0.25 && size > 16) {
+            resize((int) (items.length * 0.25));
+        }
+        return front;
+    }
+
+    /** Deletes item from back of the list and
+    * returns deleted item. */
+    public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
+        T back = get(size - 1);
+        items[size - 1] = null;
+        size = size - 1;
+        if (size <= items.length * 0.25 && size > 16) {
+            resize((int) (items.length * 0.25)+1);
+        }
+        return back;
+    }
+
+
+    /** Inserts item into given position.*/
+    public void insert(T x, int position) {
+        T[] newItems = (T[]) new Object[items.length + 1];
+
+        System.arraycopy(items, 0, newItems, 0, position);
+        newItems[position] = x;
+
+        System.arraycopy(items, position, newItems, position + 1, items.length - position);
+        items = newItems;
+    }
+
+
+}
+
+\end{lstlisting}
+
+\item 链表
+Intlist.Java
+\begin{lstlisting}
+    public class IntList {
+
+    private int first;
+    private IntList rest;
+
+    /** A List with first FIRST0 and rest REST0. */
+    public IntList(int first0, IntList rest0) {
+        first = first0;
+        rest = rest0;
+    }
+
+    /** A List with null rest, and first = 0.*/
+    public IntList() {
+        /* NOTE: public IntList () { }  would also work. */
+        this(0, null);
+    }
+
+    
+    /**
+    * Returns a list consisting of the elements of A followed by the
+    * *  elements of B.  May modify items of A.
+    */
+
+    public static IntList dmerge(IntList A, IntList B) {
+        if (A == null) {
+            A = B;
+            return A;
+        }
+        IntList prt = A;
+        while (prt.rest != null) {
+            prt = prt.rest;
+        }
+        prt.rest = B;
+        return A;
+    }
+
+    /**
+    * Returns a list consisting of the elements of A followed by the
+    * * elements of B.  May NOT modify items of A. 
+    */
+
+    public static IntList merge(IntList A, IntList B) {
+        if (A == null) {
+            return B;
+        }
+        if (A.rest == null) {
+            return new IntList(A.first, B);
+        }
+        return new IntList(A.first, merge(A.rest, B));
+    }
+}
+\end{lstlisting}
+
+\item 双向循环链表
+LinkedListDeque.java
+\begin{lstlisting}
+/** DLLists based list.
+*  @author zilong
+*/
+
+/* Invariants:
+addLast: The next item we want to add, will go into position size
+getLast: The item we want to return is in position size - 1
+size: The number of items in the list should be size.
+*/
+
+public class LinkedListDeque<T> implements List<T>{
+
+    /* Double-ended queues are sequence containers with dynamic sizes
+    that can be expanded or contracted on both ends (either its front or its back).*/
+
+    private class StuffNode {
+        private StuffNode prev;
+        private T item;
+        private StuffNode next;
+        public StuffNode(StuffNode f, T i, StuffNode n) {
+            prev = f;
+            item = i;
+            next = n;
+        }
+        /** Returns the ith item of this IntList. */
+        public T get(int i) {
+            if (i == 0) {
+                return item;
+            }
+            return next.get(i - 1);
+        }
+    }
+
+    /* The first item (if it exists) is at sentinel.next. */
+    private StuffNode sentinel;
+    private int size;
+
+    public LinkedListDeque() {
+        size = 0;
+        sentinel = new StuffNode(null, null, null);
+        sentinel.next = sentinel;
+        sentinel.prev = sentinel;
+    }
+
+    public LinkedListDeque(T x) {
+        sentinel = new StuffNode(null, null, null);
+        sentinel.next = new StuffNode(sentinel,x,sentinel);
+        sentinel.prev = sentinel.next;
+        size = 1;
+    }
+
+    /** Creates a deep copy of other.*/
+    /*public LinkedListDeque(LinkedListDeque other) {
+        size = 0;
+        sentinel = new StuffNode(null, null, null);
+        sentinel.next = sentinel;
+        sentinel.prev = sentinel;
+        for (int i = 0; i < other.size(); i++) {
+            this.addLast((T) other.get(i + 1));
+        }
+    }*/
+
+    /** Adds an item of type T to the front of the deque.*/
+    public void addFirst(T item) {
+        size = size + 1;
+        sentinel.next = new StuffNode(sentinel, item, sentinel.next);
+        if (size == 1) {
+            sentinel.prev = sentinel.next;
+        }
+        sentinel.next.next.prev = sentinel.next;
+    }
+
+    /** Adds an item of type T to the back of the deque.*/
+    public void addLast(T item) {
+        size = size + 1;
+        sentinel.prev.next = new StuffNode(sentinel.prev, item, sentinel);
+        sentinel.prev = sentinel.prev.next;
+    }
+
+    /** Returns true if deque is empty, false otherwise.*/
+    public boolean isEmpty() {
+        /* if (sentinel.next.item == null){
+            return true;
+        }
+        return false;*/
+        if (size == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**  Returns the number of items in the deque.*/
+    public int size() {
+        return size;
+    }
+    /** Prints the items in the deque from first to last, separated by a space.
+    * Once all the items have been printed, print out a new line.*/
+    public void printDeque() {
+        StuffNode p = sentinel.next;
+        if (size == 0) {
+            System.out.println("The deque is empty.");
+        }
+        for (int i = 0; i < size; i++) {
+            System.out.print(p.item + " ");
+            p = p.next;
+        }
+        System.out.println("\n");
+    }
+
+    /**Removes and returns the item at the front of the deque.
+    * If no such item exists, returns null.*/
+    public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
+        T front = sentinel.next.item;
+        sentinel.next.next.prev = sentinel;
+        sentinel.next = sentinel.next.next;
+        size = size - 1;
+        return front;
+    }
+
+    /** Removes and returns the item at the back of the deque.
+    * If no such item exists, returns null.*/
+    public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
+        T back = sentinel.prev.item;
+        sentinel.prev.prev.next = sentinel;
+        sentinel.prev = sentinel.prev.prev;
+        size = size - 1;
+        return back;
+    }
+
+    /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
+    * If no such item exists, returns null. Must not alter the deque!*/
+    public T get(int index) {
+        StuffNode p = sentinel;
+        if (index > size) {
+            return null;
+        }
+        for (int i = 0; i <= index; i++) {
+            p = p.next;
+        }
+        //System.out.println(p.item);
+        return p.item;
+    }
+
+    
+    public T getFirst() {
+        return get(0);
+    }
+
+    public T getLast() {
+        return get(size - 1);
+    }
+
+
+    /** Same as get, but uses recursion.*/
+    public T getRecursive(int index) {
+        if (index > size) {
+            return null;
+        }
+        return sentinel.next.get(index);
+    }
+
+    
+    /** Inserts item into given position.*/
+    public void insert(T item, int position) {
+        if (sentinel.next == null || position == 0) {
+            addFirst(item);
+            return;
+        }
+
+        StuffNode currentNode = sentinel.next.next;
+        while (position > 1 && currentNode.next != null) {
+            position -= 1;
+            currentNode = currentNode.next;
+        }
+
+        StuffNode newNode = new StuffNode(currentNode, item, currentNode.next);
+        currentNode.next = newNode;
+    }	
+
+}
+
+\end{lstlisting}
+
+\end{enumerate}
+
+\end{Solutions}
+
+
+\subsection*{1.2 应用 }
+
+\begin{Solutions}
+\begin{enumerate}
+\item interface 
+List.java
+\begin{lstlisting}
+public interface List<Item> {
+    /**
+     * Inserts X into the back of the list.
+     */
+    public void addLast(Item x);
+
+    /**
+     * Returns the item from the back of the list.
+     */
+    public Item getLast();
+
+    /**
+     * Gets the ith item in the list (0 is the front).
+     */
+    public Item get(int i);
+
+    /**
+     * Returns the number of items in the list.
+     */
+    public int size();
+
+    /**
+     * Deletes item from back of the list and
+     * returns deleted item.
+     */
+    public Item removeLast();
+
+    /**
+     * Inserts item into given position.
+     * Code from discussion #3
+     */
+    public void insert(Item x, int position);
+
+    /**
+     * Inserts an item at the front.
+     */
+    public void addFirst(Item x);
+
+    /**
+     * Gets an item from the front.
+     */
+    public Item getFirst();
+
+    /** Prints the list. Works for ANY kind of list. */
+    default public void print() {
+        for (int i = 0; i < size(); i = i + 1) {
+            System.out.print(get(i) + " ");
+        }
+    }
+}
+\end{lstlisting}
+
+\end{enumerate}
+
+\end{Solutions}
+
+\newpage
+
+\iffalse
+\section*{2.}
+\begin{qparts}
+\item
+YOUR ANSWER GOES HERE
+
+\end{qparts}
+
+
+\newpage
+\section*{3.}
+YOUR ANSWER GOES HERE
+
+
+\newpage
+\section*{4.}
+YOUR ANSWER GOES HERE
+
+
+\newpage
+\section*{5.}
+YOUR ANSWER GOES HERE
+
+
+\newpage
+\section*{6.}
+YOUR ANSWER GOES HERE
+
+\fi
+\end{document}
