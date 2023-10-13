@@ -1,0 +1,326 @@
+
+\documentclass[UTF8]{ctexart}
+%\documentclass[11pt]{article} %指定文档的类型和基本格式。这里选择了article类，字体大小为11磅。
+\usepackage{amsmath,textcomp,amssymb,geometry,graphicx,enumerate} %加载了一些宏包，这些宏包提供了额外的功能和格式设定，例如数学符号、文本特殊符号、排版布局等。
+
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage{xeCJK} % Added for Chinese support
+%\setCJKmainfont{SimSum} % Set the Chinese font, you can change it to any font you have
+
+
+%\def\Name{zilong}
+\def\Name{王子隆}  
+\def\SID{2221411126}  
+\def\Homework{3} 
+\def\Session{Autumn 2023} 
+
+
+\title{DS--Autumn 2023 --- Homework \Homework Solutions} 
+\author{\Name, SID \SID} 
+\markboth{DS--\Session\  Homework \Homework\ \Name}{DS--\Session\ Homework \Homework\ \Name} 
+\pagestyle{myheadings} 
+\date{\today} 
+
+\newenvironment{qparts}{\begin{enumerate}[{(}a{)}]}{\end{enumerate}} %定义了一个新的环境qparts，用于创建带有小括号标记的题目部分。
+%\def\endSolutionsmark{$\mathcal{X} \mathcal{I} \mathcal{U} $} %定义了证明结束标记为一个方框符号。
+\newenvironment{Solutions}{\par{\bf Solutions}:}%{\endSolutionsmark\smallskip} %定义了一个新的环境Solutions，用于书写数学证明。
+
+
+\lstdefinestyle{mystyle}{ %%定义了一个样式mystyle，指定了Java语言，设定了代码的基本样式、注释样式、关键词样式等等
+    language=Java,
+    basicstyle=\ttfamily\small, % 设置代码字体为大一些
+    commentstyle=\color{OliveGreen},
+    keywordstyle=\color{RoyalBlue},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4
+}
+
+
+\textheight=9in
+\textwidth=6.5in
+\topmargin=-.75in
+\oddsidemargin=0.25in
+\evensidemargin=0.25in %设置了页面的尺寸和边距。
+
+
+\lstset{style=mystyle}
+
+\begin{document}
+\maketitle
+
+%Collaborators: PUT SOMETHING HERE (LIST OF YOUR COLLABORATORS, OR WRITE NONE)
+
+\begin{abstract}
+    %Abstract goes here...
+    二叉树实现及应用 面向过程 面向对象
+
+    定义
+    
+    二叉树遍历（ 九种方法 递归 非递归 * 2 * 3 
+
+    preorder inorder postorder 
+
+    复杂度 时间空间
+
+    最坏情况 最好情况 最废空间 最省空间
+
+    二叉树的主要性质
+
+    语法制导编辑器
+
+    修改数据结构 （不借助外力 stack queue 
+
+    
+
+\end{abstract}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section*{1. 二叉树实现}
+\begin{qparts}
+    \item 
+    功能实现
+    
+    \item
+    应用 
+\end{qparts}
+
+\subsection*{1.1 面向过程}
+
+\begin{Solutions}
+\begin{enumerate} % for numbers
+
+\item 结构体
+ArrayDeque.java
+\begin{lstlisting}
+/** Array based list.
+*  @author zilong
+*/
+
+
+\end{lstlisting}
+
+
+\end{enumerate}
+
+\end{Solutions}
+
+
+\subsection*{1.2 面向对象 }
+
+\begin{Solutions}
+
+\begin{enumerate}
+\item interface 
+List.java
+
+\begin{lstlisting}
+public interface List<Item> 
+\end{lstlisting}
+
+\end{enumerate}
+
+\end{Solutions}
+
+
+
+
+
+
+\clearpage
+
+\newpage
+
+%\iffalse
+
+\section*{2.二叉树遍历}
+\begin{qparts}
+\item 
+
+二叉树遍历（ 九种方法 递归 非递归 * 2 * 3 
+
+preorder inorder postorder 
+
+复杂度 时间空间
+
+最坏情况 最好情况 最废空间 最省空间
+
+
+\end{qparts}
+
+\subsection*{preorder}
+
+\subsubsection*{recursive}
+\begin{Solutions}
+    \begin{lstlisting}
+        
+    \end{lstlisting}
+\end{Solutions}
+
+\subsubsection*{nonrecursive}
+\begin{enumerate}
+    \item recursivelike
+    \begin{Solutions}
+    
+    \end{Solutions}
+    
+
+    
+    \item other way 
+    \begin{Solutions}
+    
+    \end{Solutions}
+    
+\end{enumerate}
+
+
+\subsection*{inorder}
+\subsubsection*{recursive}
+\begin{Solutions}
+    
+\end{Solutions}
+\subsubsection*{nonrecursive}
+\begin{enumerate}
+    \item recursivelike
+    \begin{Solutions}
+    
+    \end{Solutions}
+    
+
+    
+    \item other way 
+    \begin{Solutions}
+    
+    \end{Solutions}
+    
+\end{enumerate}
+
+\subsection*{postorder}
+\subsubsection*{recursive}
+\begin{Solutions}
+    
+\end{Solutions}
+\subsubsection*{nonrecursive}
+\begin{enumerate}
+    \item recursivelike
+    \begin{Solutions}
+    
+    \end{Solutions}
+    
+
+    
+    \item other way 
+    \begin{Solutions}
+    
+    \end{Solutions}
+    
+\end{enumerate}
+
+\subsection*{复杂度分析}
+\begin{enumerate}
+    \item   复杂度 时间空间
+    \item   最坏情况 最好情况 %/最废空间 最省空间
+\end{enumerate}
+
+
+\subsection*{层次遍历}
+\begin{enumerate}
+    \item   复杂度 时间空间
+    \item   借助外力 stack queue 逻辑
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+\newpage
+\section*{3.二叉树的定义、主要性质、定理}
+\begin{qparts}
+    \item 递归定义及基本术语
+    \item 分类 顺序存储 链式存储
+    \item 性质*5
+\end{qparts}
+
+\subsection*{definition}
+\begin{Solutions}
+    \begin{enumerate}
+        \item   a recursive definition
+    \end{enumerate}
+
+
+\end{Solutions}
+
+\subsection*{category}
+\begin{Solutions}
+
+    \begin{enumerate}
+        \item sequential structure
+        \item list structure
+    \end{enumerate}
+
+\end{Solutions}
+
+
+\subsection*{properties quality character}
+\begin{Solutions}
+    \begin{enumerate}
+    \item i \& $2^ {i-1}$ floor
+    \item k \& $2^k - 1$ all the tree 
+    \item $ n_0 = n_2 + 1 $
+    \item height = $[\log _2 n ] + 1$
+    \item structure of root, Lchild, Rchild 
+    \end{enumerate}
+    
+\end{Solutions}
+
+
+
+
+
+
+\newpage
+\section*{4.证明}
+YOUR ANSWER GOES HERE
+
+\subsection*{something to prove}
+\begin{Solutions}
+    \begin{enumerate}
+        \item 给定tree 遍历序列唯一 给定位置唯一存在（ 顺序唯一
+        \item 中序遍历猜想 + 先序猜想
+        \item 遍历时的性质*5
+        \item n node  2*n pointer  N-1 in use 
+    \end{enumerate}
+
+\end{Solutions}
+
+\newpage
+\section*{5.修改数据结构 }
+YOUR ANSWER GOES HERE
+
+
+\newpage
+\section*{6.BinaryTree in java}
+
+%\fi
+\end{document}
