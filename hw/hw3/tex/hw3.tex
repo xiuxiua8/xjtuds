@@ -1,4 +1,3 @@
-
 \documentclass[UTF8]{ctexart}
 %\documentclass[11pt]{article} %指定文档的类型和基本格式。这里选择了article类，字体大小为11磅。
 \usepackage{amsmath,textcomp,amssymb,geometry,graphicx,enumerate} %加载了一些宏包，这些宏包提供了额外的功能和格式设定，例如数学符号、文本特殊符号、排版布局等。
@@ -29,7 +28,7 @@
 \newenvironment{Solutions}{\par{\bf Solutions}:}%{\endSolutionsmark\smallskip} %定义了一个新的环境Solutions，用于书写数学证明。
 
 
-\lstdefinestyle{mystyle}{ %%定义了一个样式mystyle，指定了Java语言，设定了代码的基本样式、注释样式、关键词样式等等
+\lstdefinestyle{javastyle}{ %%定义了一个样式mystyle，指定了Java语言，设定了代码的基本样式、注释样式、关键词样式等等
     language=Java,
     basicstyle=\ttfamily\small, % 设置代码字体为大一些
     commentstyle=\color{OliveGreen},
@@ -42,6 +41,18 @@
     tabsize=4
 }
 
+\lstdefinestyle{cppstyle}{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    commentstyle=\color{OliveGreen},
+    keywordstyle=\color{RoyalBlue},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4
+}
 
 \textheight=9in
 \textwidth=6.5in
@@ -50,7 +61,7 @@
 \evensidemargin=0.25in %设置了页面的尺寸和边距。
 
 
-\lstset{style=mystyle}
+%\lstset{style=mystyle}
 
 \begin{document}
 \maketitle
@@ -77,8 +88,16 @@
 
     修改数据结构 （不借助外力 stack queue 
 
-    
+    三叉链表 利用空指针（增加标识
 
+    哈夫曼树 定义性质应用
+
+    二叉树分类
+
+    BST
+
+    ASL 平均查找长度
+    
 \end{abstract}
 
 
@@ -129,10 +148,169 @@ ArrayDeque.java
 
 \begin{enumerate}
 \item interface 
-List.java
+BinaryTree.java
 
-\begin{lstlisting}
-public interface List<Item> 
+\begin{lstlisting}[style=cppstyle]
+    #include <iostream>
+    #include "../hw2/SeqStack.cpp"
+    //#define NULL nullptr
+    #define cin std::cin 
+    #define cout std::cout
+    #define endl std::endl
+    
+    
+    template <class T>
+    class BinaryTreeNode{
+    private:
+        T data;           			
+        BinaryTreeNode<T>*  left; 	
+        BinaryTreeNode<T>*  right; 	
+    
+    
+    public:
+        BinaryTreeNode(); 	                   
+        BinaryTreeNode(const T& elem);	
+        BinaryTreeNode(const T& elem, BinaryTreeNode<T>* l, BinaryTreeNode<T>* r);
+        ~BinaryTreeNode(){};
+        T value() const;				
+        BinaryTreeNode<T>*  leftchild() const;	
+        BinaryTreeNode<T>*  rightchild() const;	
+        void  setLeftchild(BinaryTreeNode<T>*);	
+        void  setRightchild(BinaryTreeNode<T>*);	
+        void  setValue(const T& val);		
+        bool  isLeaf() const;		
+    };
+    
+    
+    
+    template<class T>
+    BinaryTreeNode<T>::BinaryTreeNode(){
+        data = nullptr;
+        left = nullptr;
+        right = nullptr;
+    }
+    
+    template<class T>
+    BinaryTreeNode<T>::BinaryTreeNode(const T& elem){
+        data = elem;
+        left = nullptr;
+        right = nullptr;
+    }
+    
+    template<class T>
+    BinaryTreeNode<T>::BinaryTreeNode(const T& elem, BinaryTreeNode<T>* l, BinaryTreeNode<T>* r){
+        data = elem;
+        left = l;
+        right = r;
+    }
+    
+    
+    template<class T>
+    T BinaryTreeNode<T>::value() const{
+        return this->data;
+    }
+    
+    template<class T>
+    BinaryTreeNode<T>*  BinaryTreeNode<T>::leftchild() const{
+        return this->left;
+    }
+    
+    template<class T>
+    BinaryTreeNode<T>*  BinaryTreeNode<T>::rightchild() const{
+        return this->right;
+    }
+    
+    template<class T>
+    void BinaryTreeNode<T>::setLeftchild(BinaryTreeNode<T>* Lchild){
+        this->left = Lchild;
+    }
+    
+    template<class T>
+    void BinaryTreeNode<T>::setRightchild(BinaryTreeNode<T>* Rchild){
+        this->right = Rchild;
+    }
+    
+    template<class T>
+    void BinaryTreeNode<T>::setValue(const T& Value){
+        this->data = Value;
+    }
+    
+    template<class T>
+    bool BinaryTreeNode<T>::isLeaf() const{
+        return false;
+    }
+    
+    
+    
+    
+    
+    template <class T>
+    class BinaryTree{
+    protected:
+        BinaryTreeNode<T>* root;        			
+    public:
+        BinaryTree() {root = nullptr;} 			
+        BinaryTree(BinaryTreeNode<T>* r) {root = r;}
+        ~BinaryTree() { DeleteBinaryTree(root); };    	
+        bool isEmpty() { return root==nullptr; };  		
+        void visit(BinaryTree<T>& curr){cout <<curr->data << " ";} 
+        BinaryTreeNode<T>*& Root() {return root;};   	
+        void CreateTree(const T& data, BinaryTreeNode<T>* lefttree, BinaryTreeNode<T>* righttree);
+        void CreateTree(BinaryTreeNode<T> *&r); 
+        void DeleteBinaryTree(BinaryTreeNode<T>* root); 
+    
+        void PreOrder(BinaryTreeNode<T>* root); 	
+        void InOrder(BinaryTreeNode<T>* root); 	
+        void PostOrder(BinaryTreeNode<T>* root); 	
+        void PreOrderWithoutRecusion(BinaryTreeNode<T>* root);
+        void InOrderWithoutRecusion(BinaryTreeNode<T>* root); 
+        void PostOrderWithoutRecusion(BinaryTreeNode<T>* root);
+        void LevelOrder(BinaryTreeNode<T>* root);	 
+    };
+    
+    
+    template<class T> 
+    void BinaryTree<T>::CreateTree(const T& data, BinaryTreeNode<T>* leftTree, BinaryTreeNode<T>* rightTree) {
+        root = BinaryTreeNode<T>(data, leftTree, rightTree);
+        BinaryTree(root);
+    }
+    
+    
+    
+    
+    template<class T> 
+    void BinaryTree<T>::DeleteBinaryTree(BinaryTreeNode<T>* Root){
+        if (Root != NULL) {
+            DeleteBinaryTree(Root->left);
+            DeleteBinaryTree(Root->right);  
+            delete Root;                    
+        }
+    }
+    
+    template<class T>
+    void BinaryTree<T>::PreOrder(BinaryTreeNode<T>* root){
+        if (root == NULL)  return;
+        visit(root->value());			
+        PreOrder(root->leftchild());		
+        PreOrder(root->rightchild());		
+    }
+    
+    
+    template<class T>
+    void BinaryTree<T>::PreOrderWithoutRecusion(BinaryTreeNode <T> * root){
+        SeqStack<BinaryTreeNode<T>* > tStack;
+        BinaryTreeNode<T>* pointer = root;
+        while(!tStack.empty() || pointer){
+            if (pointer){
+                visit(pointer->value());               
+                tStack.push(pointer);                   
+                pointer = pointer->leftchild();     
+            } else{	                                    
+                pointer = tStack.top();              
+                tStack.pop();                          
+                pointer = pointer->rightchild(); }
+        }
+    }
 \end{lstlisting}
 
 \end{enumerate}
@@ -317,10 +495,116 @@ YOUR ANSWER GOES HERE
 \newpage
 \section*{5.修改数据结构 }
 YOUR ANSWER GOES HERE
+\begin{qparts}
+    \item 
+    利用空指针（增加标识
+    
+    \item
+    三叉链表 
+\end{qparts}
+
+\subsection*{1.1 利用空指针}
+
+\begin{Solutions}
+\begin{enumerate} % for numbers
+
+\item 结构体
+ArrayDeque.java
+\begin{lstlisting}
+/** Array based list.
+*  @author zilong
+*/
+
+
+\end{lstlisting}
+
+
+\end{enumerate}
+
+\end{Solutions}
+
+
+\subsection*{1.2 三叉链表 }
+
+\begin{Solutions}
+
+\begin{enumerate}
+\item interface 
+List.java
+
+\begin{lstlisting}
+public interface List<Item> 
+\end{lstlisting}
+
+\end{enumerate}
+
+\end{Solutions}
+
+
+
+
+
+
+\clearpage
+
 
 
 \newpage
-\section*{6.BinaryTree in java}
+
+
+\newpage
+\section*{6.Huffman tree}
+
+\begin{qparts}
+    \item 递归定义及基本术语
+    \item 分类 顺序存储 链式存储
+    \item 应用*4
+\end{qparts}
+
+\subsection*{definition}
+\begin{Solutions}
+    \begin{enumerate}
+        \item   a recursive definition
+    \end{enumerate}
+
+
+\end{Solutions}
+
+\subsection*{category}
+\begin{Solutions}
+
+    \begin{enumerate}
+        \item sequential structure
+        \item list structure
+    \end{enumerate}
+
+\end{Solutions}
+
+
+\subsection*{properties quality character}
+\begin{Solutions}
+    \begin{enumerate}
+    \item i \& $2^ {i-1}$ floor
+    \item k \& $2^k - 1$ all the tree 
+    \item $ n_0 = n_2 + 1 $
+    \item height = $[\log _2 n ] + 1$
+    \item structure of root, Lchild, Rchild 
+    \end{enumerate}
+    
+\end{Solutions}
+
+
+
+\newpage
+\section*{7.Binary searching/sorting Tree }
+
+
+\newpage
+\section*{8.BinaryTree categories}
+
+
+\newpage
+\section*{9.BinaryTree in java}
 
 %\fi
 \end{document}
