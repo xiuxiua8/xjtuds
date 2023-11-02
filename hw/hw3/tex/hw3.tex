@@ -185,7 +185,7 @@ BinaryTree.java
     
     template<class T>
     BinaryTreeNode<T>::BinaryTreeNode(){
-        data = nullptr;
+        data = T();
         left = nullptr;
         right = nullptr;
     }
@@ -241,6 +241,16 @@ BinaryTree.java
     }
     
     
+    enum Tag{L, R, M};
+    template <class T>
+    class StackNode{
+    public:
+        BinaryTreeNode<T>* pointer;
+        Tag tag;
+        StackNode() {pointer = nullptr; tag = L;}
+        StackNode(BinaryTreeNode<T>* ptr,Tag tg){pointer = ptr; tag =tg;}
+    };
+    
     
     
     
@@ -253,7 +263,7 @@ BinaryTree.java
         BinaryTree(BinaryTreeNode<T>* r) {root = r;}
         ~BinaryTree() { DeleteBinaryTree(root); };    	
         bool isEmpty() { return root==nullptr; };  		
-        void visit(BinaryTree<T>& curr){cout <<curr->data << " ";} 
+        void visit(const BinaryTree<T>& curr){cout << curr.root->value() << " ";} 
         BinaryTreeNode<T>*& Root() {return root;};   	
         void CreateTree(const T& data, BinaryTreeNode<T>* lefttree, BinaryTreeNode<T>* righttree);
         void CreateTree(BinaryTreeNode<T> *&r); 
@@ -262,16 +272,19 @@ BinaryTree.java
         void PreOrder(BinaryTreeNode<T>* root); 	
         void InOrder(BinaryTreeNode<T>* root); 	
         void PostOrder(BinaryTreeNode<T>* root); 	
+        void PreOrderLikeRecusion(BinaryTreeNode<T>* root);
+        void InOrderLikeRecusion(BinaryTreeNode<T>* root);
+        void PostOrderLikeRecusion(BinaryTreeNode<T>* root);
         void PreOrderWithoutRecusion(BinaryTreeNode<T>* root);
         void InOrderWithoutRecusion(BinaryTreeNode<T>* root); 
         void PostOrderWithoutRecusion(BinaryTreeNode<T>* root);
-        void LevelOrder(BinaryTreeNode<T>* root);	 
+        void LevelOrder(BinaryTreeNode<T>* root);	
     };
     
     
     template<class T> 
     void BinaryTree<T>::CreateTree(const T& data, BinaryTreeNode<T>* leftTree, BinaryTreeNode<T>* rightTree) {
-        root = BinaryTreeNode<T>(data, leftTree, rightTree);
+        root = new BinaryTreeNode<T>(data, leftTree, rightTree);
         BinaryTree(root);
     }
     
@@ -281,36 +294,14 @@ BinaryTree.java
     template<class T> 
     void BinaryTree<T>::DeleteBinaryTree(BinaryTreeNode<T>* Root){
         if (Root != NULL) {
-            DeleteBinaryTree(Root->left);
-            DeleteBinaryTree(Root->right);  
-            delete Root;                    
+            DeleteBinaryTree(Root->leftchild());   
+            DeleteBinaryTree(Root->rightchild());  
+            Root->~BinaryTreeNode();
         }
     }
     
-    template<class T>
-    void BinaryTree<T>::PreOrder(BinaryTreeNode<T>* root){
-        if (root == NULL)  return;
-        visit(root->value());			
-        PreOrder(root->leftchild());		
-        PreOrder(root->rightchild());		
-    }
-    
-    
-    template<class T>
-    void BinaryTree<T>::PreOrderWithoutRecusion(BinaryTreeNode <T> * root){
-        SeqStack<BinaryTreeNode<T>* > tStack;
-        BinaryTreeNode<T>* pointer = root;
-        while(!tStack.empty() || pointer){
-            if (pointer){
-                visit(pointer->value());               
-                tStack.push(pointer);                   
-                pointer = pointer->leftchild();     
-            } else{	                                    
-                pointer = tStack.top();              
-                tStack.pop();                          
-                pointer = pointer->rightchild(); }
-        }
-    }
+
+
 \end{lstlisting}
 
 \end{enumerate}
@@ -347,8 +338,14 @@ preorder inorder postorder
 
 \subsubsection*{recursive}
 \begin{Solutions}
-    \begin{lstlisting}
-        
+    \begin{lstlisting}[style=cppstyle]
+template<class T>
+void BinaryTree<T>::PreOrder(BinaryTreeNode<T>* root){
+    if (root == NULL)  return;
+    visit(root);			
+    PreOrder(root->leftchild());		
+    PreOrder(root->rightchild());		
+}
     \end{lstlisting}
 \end{Solutions}
 
@@ -356,14 +353,49 @@ preorder inorder postorder
 \begin{enumerate}
     \item recursivelike
     \begin{Solutions}
-    
+    \begin{lstlisting}[style=cppstyle]
+template<class T>
+void BinaryTree<T>::PreOrderLikeRecusion(BinaryTreeNode <T> * root){
+    SeqStack<BinaryTreeNode<T>*> tStack(10);
+    BinaryTreeNode<T>* pointer = root;
+    while(!tStack.IsEmpty() || pointer){
+        if (pointer){
+            visit(pointer);               
+            tStack.Push(pointer);                  
+            pointer = pointer->leftchild();     
+        } else{	                                    
+            pointer = tStack.Pop();               
+            //tStack.Pop();                            
+            pointer = pointer->rightchild(); }
+    }
+}
+    \end{lstlisting}
     \end{Solutions}
     
 
     
     \item other way 
     \begin{Solutions}
-    
+    \begin{lstlisting}[style=cppstyle]
+template<class T>
+void BinaryTree<T>::PreOrderWithoutRecusion(BinaryTreeNode <T> * root){
+    SeqStack<BinaryTreeNode<T>*> tStack(10);
+    BinaryTreeNode<T>* pointer = root;
+    if (!pointer) {return;};
+    tStack.Push(pointer);
+    while(!tStack.IsEmpty()){  //use the feature of stack
+        pointer = tStack.Pop();
+        visit(pointer);
+        if(pointer->rightchild()){
+            tStack.Push(pointer->rightchild());// first in then out
+        }
+        if (pointer->leftchild()){
+            tStack.Push(pointer->leftchild());
+        }
+    }
+    //does queue do the same work?
+}   
+    \end{lstlisting}
     \end{Solutions}
     
 \end{enumerate}
@@ -372,19 +404,72 @@ preorder inorder postorder
 \subsection*{inorder}
 \subsubsection*{recursive}
 \begin{Solutions}
-    
+    \begin{lstlisting}[style=cppstyle]
+template<class T>
+void BinaryTree<T>::InOrder(BinaryTreeNode<T>* root){
+    if (root == NULL) return;
+    InOrder(root->leftchild());
+    visit(root);
+    InOrder(root->rightchild());
+}        
+    \end{lstlisting}
+
 \end{Solutions}
 \subsubsection*{nonrecursive}
 \begin{enumerate}
     \item recursivelike
     \begin{Solutions}
-    
+    \begin{lstlisting}[style=cppstyle]
+template<class T>
+void BinaryTree<T>::InOrderLikeRecusion(BinaryTreeNode <T> * root){
+    SeqStack<BinaryTreeNode<T>*> tStack(10);
+    BinaryTreeNode<T>* pointer = root;
+    while(!tStack.IsEmpty() || pointer){
+        if (pointer){            
+            tStack.Push(pointer);                   
+            pointer = pointer->leftchild();     
+        } else{	                                    
+            pointer = tStack.Pop();  
+            visit(pointer);
+            //tStack.Push(pointer);               
+            //tStack.Pop();                            
+            pointer = pointer->rightchild(); }  
+    }
+}
+    \end{lstlisting}
     \end{Solutions}
     
 
     
     \item other way 
     \begin{Solutions}
+    \begin{lstlisting}[style=cppstyle]
+template<class T>
+void BinaryTree<T>::InOrderWithoutRecusion(BinaryTreeNode <T> * root){
+    SeqStack<StackNode<T>*> tStack(10);
+    //BinaryTreeNode<T>* pointer = root;
+    StackNode<T>* Tagptr = new StackNode<T>();
+    Tagptr->pointer = root;
+    
+    if (!Tagptr->pointer) {return;};
+    tStack.Push(Tagptr);
+    while(!tStack.IsEmpty()){  
+        Tagptr = tStack.Pop();
+        if (Tagptr->tag == L) {
+            if(Tagptr->pointer->rightchild()){
+                StackNode<T>* tem = new StackNode<T>(Tagptr->pointer->rightchild(), L);
+                tStack.Push(tem);
+            }
+            StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, R);
+            tStack.Push(tem);
+            if (Tagptr->pointer->leftchild()){
+                StackNode<T>* tem = new StackNode<T>(Tagptr->pointer->leftchild(), L);
+                tStack.Push(tem);
+            } 
+        } else visit(Tagptr->pointer);
+    }
+}
+    \end{lstlisting}        
     
     \end{Solutions}
     
@@ -393,20 +478,84 @@ preorder inorder postorder
 \subsection*{postorder}
 \subsubsection*{recursive}
 \begin{Solutions}
-    
+    \begin{lstlisting}[style=cppstyle]
+        template<class T>
+void BinaryTree<T>::PostOrder(BinaryTreeNode<T>* root){
+    if (root == NULL) return;
+    PostOrder(root->leftchild());
+    PostOrder(root->rightchild());
+    visit(root);
+}
+    \end{lstlisting}
 \end{Solutions}
 \subsubsection*{nonrecursive}
 \begin{enumerate}
     \item recursivelike
     \begin{Solutions}
-    
+        \begin{lstlisting}[style=cppstyle]
+template<class T>
+void BinaryTree<T>::PostOrderLikeRecusion(BinaryTreeNode <T> * root){
+    SeqStack<StackNode<T>* > tStack(10);
+    StackNode<T>* Tagptr = new StackNode<T>(root, L);
+
+    while (!tStack.IsEmpty() || Tagptr->pointer != nullptr ){
+        while (Tagptr->pointer != nullptr) {
+            StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, L);
+            tStack.Push(tem);
+            Tagptr->pointer = Tagptr->pointer->leftchild();
+        }
+        if (!tStack.IsEmpty()) {
+            Tagptr = tStack.Pop();
+            if (Tagptr->tag == L ) {
+                StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, R);
+                tStack.Push(tem);
+                Tagptr->pointer = Tagptr->pointer->rightchild();
+            } else {
+                visit(Tagptr->pointer);
+                Tagptr->pointer = nullptr;
+            }
+        }
+    }
+}
+        \end{lstlisting}   
     \end{Solutions}
     
 
     
     \item other way 
     \begin{Solutions}
+        \begin{lstlisting}[style=cppstyle]
+template<class T>
+void BinaryTree<T>::PostOrderWithoutRecusion(BinaryTreeNode <T> * root){
+    SeqStack<StackNode<T>*> tStack(10);
+    //BinaryTreeNode<T>* pointer = root;
+    StackNode<T>* Tagptr = new StackNode<T>();
+    Tagptr->pointer = root;
     
+    if (!Tagptr->pointer) {return;};
+    tStack.Push(Tagptr);
+    while(!tStack.IsEmpty()){  
+        Tagptr = tStack.Pop();
+        if (Tagptr->tag == L) {
+            StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, R);
+            tStack.Push(tem);
+            if (Tagptr->pointer->rightchild()){
+                StackNode<T>* tem = new StackNode<T>(Tagptr->pointer->rightchild(), L);
+                tStack.Push(tem);
+            }
+            if (Tagptr->pointer->leftchild()){
+                StackNode<T>* tem = new StackNode<T> (Tagptr->pointer->leftchild(), L);
+                tStack.Push(tem);
+            }
+        } else if (Tagptr->tag == R) {
+            StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, M);
+            tStack.Push(tem);
+        } else {
+            visit(Tagptr->pointer);
+        }
+    }
+}
+        \end{lstlisting}    
     \end{Solutions}
     
 \end{enumerate}

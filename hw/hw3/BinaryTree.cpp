@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "../hw2/SeqStack.cpp"
 //#define NULL nullptr
@@ -10,31 +9,30 @@
 template <class T>
 class BinaryTreeNode{
 private:
-    T data;           			//二叉树结点数据域
-    BinaryTreeNode<T>*  left; 	//二叉树结点指向左子树的指针
-    BinaryTreeNode<T>*  right; 	//二叉树结点指向左子树的指针
+    T data;           			
+    BinaryTreeNode<T>*  left; 	
+    BinaryTreeNode<T>*  right; 	
 
 
 public:
-	BinaryTreeNode(); 	                   //缺省构造函数
-	BinaryTreeNode(const T& elem);	//给定数据的构造函数
+	BinaryTreeNode(); 	                   
+	BinaryTreeNode(const T& elem);	
 	BinaryTreeNode(const T& elem, BinaryTreeNode<T>* l, BinaryTreeNode<T>* r);
-		//给定数据的左右指针的构造函数
 	~BinaryTreeNode(){};
-	T value() const;				//返回当前结点的数据
-	BinaryTreeNode<T>*  leftchild() const;	//返回当前结点指向左子树的指针
-	BinaryTreeNode<T>*  rightchild() const;	//返回当前结点指向右子树的指针
-	void  setLeftchild(BinaryTreeNode<T>*);	//设置当前结点的左子树
-	void  setRightchild(BinaryTreeNode<T>*);	//设置当前结点的右子树
-	void  setValue(const T& val);		//设置当前结点的数据域
-	bool  isLeaf() const;		//判定当前结点是否为叶结点,若是返回true
+	T value() const;				
+	BinaryTreeNode<T>*  leftchild() const;	
+	BinaryTreeNode<T>*  rightchild() const;	
+	void  setLeftchild(BinaryTreeNode<T>*);	
+	void  setRightchild(BinaryTreeNode<T>*);	
+	void  setValue(const T& val);		
+	bool  isLeaf() const;		
 };
 
 
 
 template<class T>
 BinaryTreeNode<T>::BinaryTreeNode(){
-    data = nullptr;
+    data = T();
     left = nullptr;
     right = nullptr;
 }
@@ -90,38 +88,50 @@ bool BinaryTreeNode<T>::isLeaf() const{
 }
 
 
+enum Tag{L, R, M};
+template <class T>
+class StackNode{
+public:
+    BinaryTreeNode<T>* pointer;
+    Tag tag;
+    StackNode() {pointer = nullptr; tag = L;}
+    StackNode(BinaryTreeNode<T>* ptr,Tag tg){pointer = ptr; tag =tg;}
+};
+
 
 
 
 template <class T>
 class BinaryTree{
 protected:
-    BinaryTreeNode<T>* root;        			//二叉树根结点指针
+    BinaryTreeNode<T>* root;        			
 public:
-    BinaryTree() {root = nullptr;} 			//构造函数
+    BinaryTree() {root = nullptr;} 			
     BinaryTree(BinaryTreeNode<T>* r) {root = r;}
-    ~BinaryTree() { DeleteBinaryTree(root); };    	//析构函数
-    bool isEmpty() { return root==nullptr; };  		//判断二叉树是否为空树
-    void visit(BinaryTree<T>& curr){cout <<curr->data << " ";} //访问当前结点
-    BinaryTreeNode<T>*& Root() {return root;};   	//返回二叉树的根结点
+    ~BinaryTree() { DeleteBinaryTree(root); };    	
+    bool isEmpty() { return root==nullptr; };  		
+    void visit(const BinaryTree<T>& curr){cout << curr.root->value() << " ";} 
+    BinaryTreeNode<T>*& Root() {return root;};   	
     void CreateTree(const T& data, BinaryTreeNode<T>* lefttree, BinaryTreeNode<T>* righttree);
-	//以data作为根结点，ltree作为树的左子树，rtree作为树的右子树，构造一棵新二叉树 
-    void CreateTree(BinaryTreeNode<T> *&r); //根据先序遍历序列构造二叉树
-	void DeleteBinaryTree(BinaryTreeNode<T>* root); //删除二叉树及其子树
+    void CreateTree(BinaryTreeNode<T> *&r); 
+	void DeleteBinaryTree(BinaryTreeNode<T>* root); 
 
-	void PreOrder(BinaryTreeNode<T>* root); 	//前序遍历二叉树或其子树
-	void InOrder(BinaryTreeNode<T>* root); 	//中序遍历二叉树或其子树
-	void PostOrder(BinaryTreeNode<T>* root); 	//后序遍历二叉树或其子树
-	void PreOrderWithoutRecusion(BinaryTreeNode<T>* root);//非递归前序遍历
-	void InOrderWithoutRecusion(BinaryTreeNode<T>* root); //非递归中序遍历
-	void PostOrderWithoutRecusion(BinaryTreeNode<T>* root);//非递归后序遍历
-	void LevelOrder(BinaryTreeNode<T>* root);	 //按层次遍历二叉树或其子树
+	void PreOrder(BinaryTreeNode<T>* root); 	
+	void InOrder(BinaryTreeNode<T>* root); 	
+	void PostOrder(BinaryTreeNode<T>* root); 	
+    void PreOrderLikeRecusion(BinaryTreeNode<T>* root);
+	void InOrderLikeRecusion(BinaryTreeNode<T>* root);
+	void PostOrderLikeRecusion(BinaryTreeNode<T>* root);
+	void PreOrderWithoutRecusion(BinaryTreeNode<T>* root);
+	void InOrderWithoutRecusion(BinaryTreeNode<T>* root); 
+	void PostOrderWithoutRecusion(BinaryTreeNode<T>* root);
+	void LevelOrder(BinaryTreeNode<T>* root);	
 };
 
 
 template<class T> 
 void BinaryTree<T>::CreateTree(const T& data, BinaryTreeNode<T>* leftTree, BinaryTreeNode<T>* rightTree) {
-    root = BinaryTreeNode<T>(data, leftTree, rightTree);
+    root = new BinaryTreeNode<T>(data, leftTree, rightTree);
     BinaryTree(root);
 }
 
@@ -131,39 +141,226 @@ void BinaryTree<T>::CreateTree(const T& data, BinaryTreeNode<T>* leftTree, Binar
 template<class T> 
 void BinaryTree<T>::DeleteBinaryTree(BinaryTreeNode<T>* Root){
     if (Root != NULL) {
-        DeleteBinaryTree(Root->left);   // 递归删除左子树
-        DeleteBinaryTree(Root->right);  // 递归删除右子树
-        delete Root;                    // 删除当前节点
+        DeleteBinaryTree(Root->leftchild());   
+        DeleteBinaryTree(Root->rightchild());  
+        Root->~BinaryTreeNode();
     }
 }
 
 template<class T>
 void BinaryTree<T>::PreOrder(BinaryTreeNode<T>* root){
     if (root == NULL)  return;
-    visit(root->value());			//访问根结点
-    PreOrder(root->leftchild());		//先序遍历左子树
-    PreOrder(root->rightchild());		//先序遍历右子树
+    visit(root);			
+    PreOrder(root->leftchild());		
+    PreOrder(root->rightchild());		
 }
 
 
 template<class T>
-void BinaryTree<T>::PreOrderWithoutRecusion(BinaryTreeNode <T> * root){
-    SeqStack<BinaryTreeNode<T>* > tStack;
+void BinaryTree<T>::InOrder(BinaryTreeNode<T>* root){
+    if (root == NULL) return;
+    InOrder(root->leftchild());
+    visit(root);
+    InOrder(root->rightchild());
+}
+
+
+template<class T>
+void BinaryTree<T>::PostOrder(BinaryTreeNode<T>* root){
+    if (root == NULL) return;
+    PostOrder(root->leftchild());
+    PostOrder(root->rightchild());
+    visit(root);
+}
+
+
+template<class T>
+void BinaryTree<T>::PreOrderLikeRecusion(BinaryTreeNode <T> * root){
+    SeqStack<BinaryTreeNode<T>*> tStack(10);
     BinaryTreeNode<T>* pointer = root;
-    while(!tStack.empty() || pointer){
+    while(!tStack.IsEmpty() || pointer){
         if (pointer){
-            visit(pointer->value());                //访问当前结点
-            tStack.push(pointer);                   //当前结点地址入栈
-            pointer = pointer->leftchild();     //当前链接结构指向左孩子
-        } else{	                                    //左子树访问完毕，转向访问右子树
-            pointer = tStack.top();                 //当前链接结构指向栈顶的元素
-            tStack.pop();                                //栈顶元素出栈
+            visit(pointer);               
+            tStack.Push(pointer);                  
+            pointer = pointer->leftchild();     
+        } else{	                                    
+            pointer = tStack.Pop();               
+            //tStack.Pop();                            
             pointer = pointer->rightchild(); }
     }
 }
 
 
+template<class T>
+void BinaryTree<T>::InOrderLikeRecusion(BinaryTreeNode <T> * root){
+    SeqStack<BinaryTreeNode<T>*> tStack(10);
+    BinaryTreeNode<T>* pointer = root;
+    while(!tStack.IsEmpty() || pointer){
+        if (pointer){            
+            tStack.Push(pointer);                   
+            pointer = pointer->leftchild();     
+        } else{	                                    
+            pointer = tStack.Pop();  
+            visit(pointer);
+            //tStack.Push(pointer);               
+            //tStack.Pop();                            
+            pointer = pointer->rightchild(); }  
+    }
+}
 
-int main2(){
+template<class T>
+void BinaryTree<T>::PostOrderLikeRecusion(BinaryTreeNode <T> * root){
+    SeqStack<StackNode<T>* > tStack(10);
+    StackNode<T>* Tagptr = new StackNode<T>(root, L);
+
+    while (!tStack.IsEmpty() || Tagptr->pointer != nullptr ){
+        while (Tagptr->pointer != nullptr) {
+            StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, L);
+            tStack.Push(tem);
+            Tagptr->pointer = Tagptr->pointer->leftchild();
+        }
+        if (!tStack.IsEmpty()) {
+            Tagptr = tStack.Pop();
+            if (Tagptr->tag == L ) {
+                StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, R);
+                tStack.Push(tem);
+                Tagptr->pointer = Tagptr->pointer->rightchild();
+            } else {
+                visit(Tagptr->pointer);
+                Tagptr->pointer = nullptr;
+            }
+        }
+    }
+}
+
+template<class T>
+void BinaryTree<T>::PreOrderWithoutRecusion(BinaryTreeNode <T> * root){
+    SeqStack<BinaryTreeNode<T>*> tStack(10);
+    BinaryTreeNode<T>* pointer = root;
+    if (!pointer) {return;};
+    tStack.Push(pointer);
+    while(!tStack.IsEmpty()){  //use the feature of stack
+        pointer = tStack.Pop();
+        visit(pointer);
+        if(pointer->rightchild()){
+            tStack.Push(pointer->rightchild());// first in then out
+        }
+        if (pointer->leftchild()){
+            tStack.Push(pointer->leftchild());
+        }
+    }
+    //does queue do the same work?
+}   
+
+
+
+
+template<class T>
+void BinaryTree<T>::InOrderWithoutRecusion(BinaryTreeNode <T> * root){
+    SeqStack<StackNode<T>*> tStack(10);
+    //BinaryTreeNode<T>* pointer = root;
+    StackNode<T>* Tagptr = new StackNode<T>();
+    Tagptr->pointer = root;
+    
+    if (!Tagptr->pointer) {return;};
+    tStack.Push(Tagptr);
+    while(!tStack.IsEmpty()){  
+        Tagptr = tStack.Pop();
+        if (Tagptr->tag == L) {
+            if(Tagptr->pointer->rightchild()){
+                StackNode<T>* tem = new StackNode<T>(Tagptr->pointer->rightchild(), L);
+                tStack.Push(tem);
+            }
+            StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, R);
+            tStack.Push(tem);
+            if (Tagptr->pointer->leftchild()){
+                StackNode<T>* tem = new StackNode<T>(Tagptr->pointer->leftchild(), L);
+                tStack.Push(tem);
+            } 
+        } else visit(Tagptr->pointer);
+    }
+}
+template<class T>
+void BinaryTree<T>::PostOrderWithoutRecusion(BinaryTreeNode <T> * root){
+    SeqStack<StackNode<T>*> tStack(10);
+    //BinaryTreeNode<T>* pointer = root;
+    StackNode<T>* Tagptr = new StackNode<T>();
+    Tagptr->pointer = root;
+    
+    if (!Tagptr->pointer) {return;};
+    tStack.Push(Tagptr);
+    while(!tStack.IsEmpty()){  
+        Tagptr = tStack.Pop();
+        if (Tagptr->tag == L) {
+            StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, R);
+            tStack.Push(tem);
+            if (Tagptr->pointer->rightchild()){
+                StackNode<T>* tem = new StackNode<T>(Tagptr->pointer->rightchild(), L);
+                tStack.Push(tem);
+            }
+            if (Tagptr->pointer->leftchild()){
+                StackNode<T>* tem = new StackNode<T> (Tagptr->pointer->leftchild(), L);
+                tStack.Push(tem);
+            }
+        } else if (Tagptr->tag == R) {
+            StackNode<T>* tem = new StackNode<T>(Tagptr->pointer, M);
+            tStack.Push(tem);
+        } else {
+            visit(Tagptr->pointer);
+        }
+    }
+}
+
+
+void traversalTest() {
+    BinaryTreeNode<int> node1(1);
+    BinaryTreeNode<int> node2(2);
+    BinaryTreeNode<int> node3(3);
+    BinaryTreeNode<int> node4(4);
+    BinaryTreeNode<int> node5(5);
+    BinaryTreeNode<int> node6(6);
+
+    node1.setLeftchild(&node2);
+    node1.setRightchild(&node3);
+    node2.setLeftchild(&node4);
+    node4.setRightchild(&node5);
+    node5.setRightchild(&node6);
+
+    BinaryTree<int> tree(&node1);
+
+    cout << "PreOrder traversal:" << endl;
+    tree.PreOrder(tree.Root());
+    cout << endl;
+    cout << "InOrder traversal:" << endl;
+    tree.InOrder(tree.Root());
+    cout << endl;
+    cout << "PostOrder traversal:" << endl;
+    tree.PostOrder(tree.Root());
+    cout << endl;
+
+    cout << "PreOrder traversal Like recursion:" << endl;
+    tree.PreOrderLikeRecusion(tree.Root());
+    cout << endl;
+    cout << "InOrder traversal Like recursion:" << endl;
+    tree.InOrderLikeRecusion(tree.Root());
+    cout << endl;
+    cout << "PostOrder traversal Like recursion:" << endl;
+    tree.PostOrderLikeRecusion(tree.Root());
+    cout << endl;
+
+    cout << "PreOrder traversal Without recursion:" << endl;
+    tree.PreOrderWithoutRecusion(tree.Root());
+    cout << endl;
+    cout << "InOrder traversal Without recursion:" << endl;
+    tree.InOrderWithoutRecusion(tree.Root());
+    cout << endl;
+    cout << "PostOrder traversal Without recursion:" << endl;
+    tree.PostOrderWithoutRecusion(tree.Root());
+    cout << endl;
+
+}
+
+int main() {
+    traversalTest();
     return 0;
 }

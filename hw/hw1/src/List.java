@@ -48,9 +48,5 @@ public interface List<Item> {
         }
     }
 
-    default public void print(){
-        
-    }
-
 
 }

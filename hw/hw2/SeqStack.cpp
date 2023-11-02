@@ -16,7 +16,7 @@ class SeqStack{
         int IsFull();            	//判断栈是否是满栈，若是，返回1；否则返回0
         void SeqStackClear();    	//将栈清空
         int SeqStackLength();    	//栈的长度，即栈中元素的个数
-        void Push(Type &e);      	//入栈操作，将元素e插入栈顶
+        void Push(const Type &e);      	//入栈操作，将元素e插入栈顶
         Type &Pop();           	//出栈操作，将当前栈顶元素删除，并返回其值
         Type &GetTop();         	//返回栈顶元素
 };
@@ -34,8 +34,8 @@ SeqStack<Type>::SeqStack(int size):maxsize(size){
 template<class Type> 
 SeqStack<Type>::~SeqStack() { 
     delete base;
-    delete top;
-    delete maxsize;
+    //delete top;
+    //delete maxsize;
 }
 
 template<class Type>
@@ -59,7 +59,8 @@ int SeqStack<Type>::SeqStackLength() {
 }
 
 template<class Type>
-void SeqStack<Type>::Push(Type &e){
+void SeqStack<Type>::Push(const Type &e){
+
      if( IsFull() ){
         cout<<"栈空间已满"<<endl;
         exit(0);
@@ -85,7 +86,25 @@ Type& SeqStack<Type>::GetTop(){
     else  return base[top-1];
 }
 
-int main(){
-    cout << "Hello, World!" << endl;
+int main0() {
+    SeqStack<int> Stack(10); // Creating a stack with a maximum size of 10
+
+    cout << "Pushing elements into the stack:" << endl;
+    for (int i = 1; i <= 5; ++i) {
+        Stack.Push(i * 10);
+        cout << "Pushed: " << i * 10 << endl;
+    }
+
+    cout << "Stack length: " << Stack.SeqStackLength() << endl;
+
+    cout << "Top element: " << Stack.GetTop() << endl;
+
+    cout << "Popping elements from the stack:" << endl;
+    while (!Stack.IsEmpty()) {
+        cout << "Popped: " << Stack.Pop() << endl;
+    }
+
+    cout << "Stack length: " << Stack.SeqStackLength() << endl;
+
     return 0;
 }
