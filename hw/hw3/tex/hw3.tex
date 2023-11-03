@@ -338,6 +338,9 @@ preorder inorder postorder
 
 \subsubsection*{recursive}
 \begin{Solutions}
+遍历指 走一遍只走一遍
+递归算法的关键————写好两个条件 1.递归条件 2. 结束条件
+
     \begin{lstlisting}[style=cppstyle]
 template<class T>
 void BinaryTree<T>::PreOrder(BinaryTreeNode<T>* root){
@@ -348,10 +351,11 @@ void BinaryTree<T>::PreOrder(BinaryTreeNode<T>* root){
 }
     \end{lstlisting}
 \end{Solutions}
-
 \subsubsection*{nonrecursive}
 \begin{enumerate}
     \item recursivelike
+    
+    
     \begin{Solutions}
     \begin{lstlisting}[style=cppstyle]
 template<class T>
@@ -371,9 +375,6 @@ void BinaryTree<T>::PreOrderLikeRecusion(BinaryTreeNode <T> * root){
 }
     \end{lstlisting}
     \end{Solutions}
-    
-
-    
     \item other way 
     \begin{Solutions}
     \begin{lstlisting}[style=cppstyle]
@@ -397,7 +398,6 @@ void BinaryTree<T>::PreOrderWithoutRecusion(BinaryTreeNode <T> * root){
 }   
     \end{lstlisting}
     \end{Solutions}
-    
 \end{enumerate}
 
 
@@ -418,6 +418,8 @@ void BinaryTree<T>::InOrder(BinaryTreeNode<T>* root){
 \subsubsection*{nonrecursive}
 \begin{enumerate}
     \item recursivelike
+    
+    与前序指针行进类似，访问次序不同
     \begin{Solutions}
     \begin{lstlisting}[style=cppstyle]
 template<class T>
@@ -438,9 +440,6 @@ void BinaryTree<T>::InOrderLikeRecusion(BinaryTreeNode <T> * root){
 }
     \end{lstlisting}
     \end{Solutions}
-    
-
-    
     \item other way 
     \begin{Solutions}
     \begin{lstlisting}[style=cppstyle]
@@ -471,9 +470,9 @@ void BinaryTree<T>::InOrderWithoutRecusion(BinaryTreeNode <T> * root){
 }
     \end{lstlisting}        
     
-    \end{Solutions}
-    
+    \end{Solutions} 
 \end{enumerate}
+
 
 \subsection*{postorder}
 \subsubsection*{recursive}
@@ -519,9 +518,6 @@ void BinaryTree<T>::PostOrderLikeRecusion(BinaryTreeNode <T> * root){
 }
         \end{lstlisting}   
     \end{Solutions}
-    
-
-    
     \item other way 
     \begin{Solutions}
         \begin{lstlisting}[style=cppstyle]
@@ -557,20 +553,59 @@ void BinaryTree<T>::PostOrderWithoutRecusion(BinaryTreeNode <T> * root){
 }
         \end{lstlisting}    
     \end{Solutions}
-    
 \end{enumerate}
+
 
 \subsection*{复杂度分析}
 \begin{enumerate}
     \item   复杂度 时间空间
-    \item   最坏情况 最好情况 %/最废空间 最省空间
-\end{enumerate}
+    
+    n 为节点数 每个节点都在栈里走了两遍 故为2n
 
+    空间为栈的长度，树的高度
+
+    \begin{tabular}{|l|r|r|} \hline
+        traversalMethod & Time & Space \\\hline
+        PreOrder & $2N$ & $height$ \\
+        InOrder & $2N$ & $height$ \\
+        PostOrder & $3N$ & $\log _2 N$ \\\hline
+    \end{tabular}
+    
+
+    \item   最坏情况 最好情况 %/最废空间 最省空间
+    
+
+    \begin{tabular}{|l|r|r|} \hline   
+    traversalMethod & Bestcase & worstcase \\\hline
+        PreOrder & only rightchild & only leftchild \\
+        InOrder & only rightchild & only leftchild \\
+        PostOrder & FBT with least height & only leftchild \\\hline
+    \end{tabular}
+\end{enumerate}
 
 \subsection*{层次遍历}
 \begin{enumerate}
-    \item   复杂度 时间空间
     \item   借助外力 stack queue 逻辑
+    \begin{lstlisting}[style=cppstyle]
+        
+template<class T>
+void BinaryTree<T>::LevelOrder(BinaryTreeNode <T> * root){
+    SeqQueue<BinaryTreeNode<T>*> Queue(16);
+    Queue.InQueue(root);
+    while(!Queue.IsEmpty()) {
+        //cout << "Starting Level Order Traversal..." << endl;
+        BinaryTreeNode<T>* pointer = Queue.OutQueue();
+        if (pointer->leftchild()){
+            Queue.InQueue(pointer->leftchild());
+        }
+        if (pointer->rightchild()){
+            Queue.InQueue(pointer->rightchild());
+        }
+        visit(pointer);
+    }
+}
+
+    \end{lstlisting}
 \end{enumerate}
 
 
@@ -634,6 +669,8 @@ YOUR ANSWER GOES HERE
 \begin{Solutions}
     \begin{enumerate}
         \item 给定tree 遍历序列唯一 给定位置唯一存在（ 顺序唯一
+        
+        idea： 给定位置唯一存在 
         \item 中序遍历猜想 + 先序猜想
         \item 遍历时的性质*5
         \item n node  2*n pointer  N-1 in use 

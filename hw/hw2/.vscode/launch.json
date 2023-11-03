@@ -8,7 +8,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "D:/Documents/course/xjtuDS/hw/hw2/SeqStack.exe",
+            "program": "D:/Documents/course/xjtuDS/hw/hw2/SeqQueue.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

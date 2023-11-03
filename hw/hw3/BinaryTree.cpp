@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../hw2/SeqStack.cpp"
+#include "../hw2/SeqQueue.cpp"
 //#define NULL nullptr
 #define cin std::cin 
 #define cout std::cout
@@ -312,6 +313,24 @@ void BinaryTree<T>::PostOrderWithoutRecusion(BinaryTreeNode <T> * root){
 }
 
 
+template<class T>
+void BinaryTree<T>::LevelOrder(BinaryTreeNode <T> * root){
+    SeqQueue<BinaryTreeNode<T>*> Queue(16);
+    Queue.InQueue(root);
+    while(!Queue.IsEmpty()) {
+        //cout << "Starting Level Order Traversal..." << endl;
+        BinaryTreeNode<T>* pointer = Queue.OutQueue();
+        if (pointer->leftchild()){
+            Queue.InQueue(pointer->leftchild());
+        }
+        if (pointer->rightchild()){
+            Queue.InQueue(pointer->rightchild());
+        }
+        visit(pointer);
+    }
+}
+
+
 void traversalTest() {
     BinaryTreeNode<int> node1(1);
     BinaryTreeNode<int> node2(2);
@@ -356,6 +375,10 @@ void traversalTest() {
     cout << endl;
     cout << "PostOrder traversal Without recursion:" << endl;
     tree.PostOrderWithoutRecusion(tree.Root());
+    cout << endl;
+
+    cout << "LevelOrder:" << endl;
+    tree.LevelOrder(tree.Root());
     cout << endl;
 
 }

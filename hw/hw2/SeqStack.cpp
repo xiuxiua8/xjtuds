@@ -33,7 +33,7 @@ SeqStack<Type>::SeqStack(int size):maxsize(size){
 
 template<class Type> 
 SeqStack<Type>::~SeqStack() { 
-    delete base;
+    delete[] base;
     //delete top;
     //delete maxsize;
 }
