@@ -1,0 +1,165 @@
+
+%\documentclass[11pt]{article} %指定文档的类型和基本格式。这里选择了article类，字体大小为11磅。
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath,textcomp,amssymb,geometry,graphicx,enumerate} %加载了一些宏包，这些宏包提供了额外的功能和格式设定，例如数学符号、文本特殊符号、排版布局等。
+
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage{xeCJK} % Added for Chinese support
+%\setCJKmainfont{SimSum} % Set the Chinese font, you can change it to any font you have
+
+
+%\def\Name{zilong}
+\def\Name{王子隆}  % Your name 定义了一个名为\Name的变量，它的内容是"PUT SOMETHING HERE"。通常这个变量会在文档中被调用以插入相应的信息。
+\def\SID{2221411126}  % Your student ID number 定义了一个名为\SID的变量，它的内容也是"PUT SOMETHING HERE"。
+\def\Lab{7} % Number of Lab 定义了一个名为\Lab的变量，它的内容是"n"，表示编号。
+\def\Session{Autumn 2023} %定义了一个名为\Session的变量，它的内容是"Autumn 2023"，表示学期。
+
+
+\title{DS--Autumn 2023 --- Lab \Lab    Solutions} %设置了文档的标题，包括课程名、学期和作业编号。
+\author{\Name, SID \SID} %设置了文档的作者信息，使用了之前定义的\Name和\SID变量。
+\markboth{DS--\Session\  Lab \Lab\ \Name}{DS--\Session\ Lab \Lab\ \Name} %设置了页眉的内容。
+\pagestyle{myheadings} %设置了页眉的内容。
+\date{\today} %清空了默认的日期显示。
+
+\newenvironment{qparts}{\begin{enumerate}[{(}a{)}]}{\end{enumerate}} %定义了一个新的环境qparts，用于创建带有小括号标记的题目部分。
+%\def\endSolutionsmark{$\mathcal{X} \mathcal{I} \mathcal{U} $} %定义了证明结束标记为一个方框符号。
+\newenvironment{Solutions}{\par{\bf Solutions}:}%{\endSolutionsmark\smallskip} %定义了一个新的环境Solutions，用于书写数学证明。
+
+
+\lstdefinestyle{javastyle}{ %%定义了一个样式mystyle，指定了Java语言，设定了代码的基本样式、注释样式、关键词样式等等
+    language=Java,
+    basicstyle=\ttfamily\small, % 设置代码字体为大一些
+    commentstyle=\color{OliveGreen},
+    keywordstyle=\color{RoyalBlue},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4
+}
+
+\lstdefinestyle{cppstyle}{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    commentstyle=\color{OliveGreen},
+    keywordstyle=\color{RoyalBlue},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4
+}
+
+\textheight=9in
+\textwidth=6.5in
+\topmargin=-.75in
+\oddsidemargin=0.25in
+\evensidemargin=0.25in %设置了页面的尺寸和边距。
+
+
+
+\begin{document}
+\maketitle
+
+%Collaborators: PUT SOMETHING HERE (LIST OF YOUR COLLABORATORS, OR WRITE NONE)
+
+\begin{abstract}
+    %Abstract goes here...
+    1.问题描述
+    
+    分别采用二叉链表和顺序表作存储结构，实现对二叉排序树与平衡二叉树的操作。
+
+    2.基本要求
+
+    (1)用二叉链表作存储结构实现二叉排序树。
+        1.以回车符('\\n')为输入结束标志，输入数列L，生成一棵二叉排序树T；
+
+        2.对二叉排序树T作中序遍历，输出结果；
+
+        3.计算二叉排序树T查找成功的平均查找长度，输出结果；
+
+        4.输入元素x，查找二叉排序树T，若存在含x的结点，则删除该结点，并作中序遍历(执行操作2)；
+        否则，输出信息“无x”；
+
+    (2)用顺序表(一维数组)作存储结构----静态链表
+
+        1.以回车符('\\n')为输入结束标志，输入数列L，生成一棵二叉排序树T；
+
+        2.对二叉排序树T作中序遍历，输出结果；
+
+        3.计算二叉排序树T查找成功的平均查找长度，输出结果；
+
+        4.输入元素x，查找二叉排序树T，若存在含x的结点，则删除该结点，并作中序遍历(执行操作2)；
+        否则，输出信息“无x”；
+
+    (3)用二叉链表作存储结构实平衡的二叉排序树。
+
+        1.用数列L，生成平衡的二叉排序树BT：当插入新元素之后，发现当前的二叉排序树BT不是平衡的二叉排序树，
+        则立即将它转换成新的平衡的二叉排序树BT；
+
+        2.计算平衡的二叉排序树BT的平均查找长度，输出结果。
+
+
+
+
+     
+
+\end{abstract}
+
+
+
+
+
+
+
+\section*{1. 数据结构实现}
+\begin{qparts}
+    \item 功能实现
+
+
+    \item 应用 
+    
+\end{qparts}
+
+
+
+\subsection*{1.1 abc}
+
+\begin{Solutions}
+\begin{enumerate} % for numbers
+\item 1
+ArrayDeque.java
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\item 2
+
+\begin{lstlisting}
+
+\end{lstlisting}
+
+
+\end{enumerate}
+\end{Solutions}
+
+
+
+
+
+
+
+
+\iffalse
+\newpage
+\section*{2.}
+YOUR ANSWER GOES HERE
+\fi
+
+
+\end{document}

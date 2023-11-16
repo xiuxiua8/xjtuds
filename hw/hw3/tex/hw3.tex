@@ -320,6 +320,20 @@ BinaryTree.java
 %\iffalse
 
 \section*{2.二叉树遍历}
+
+Traversals. When we iterate over a tree, we call this a “tree traversal”.
+
+
+Depth First Traversals. 
+
+We have three depth first traversals: Pre-order, in-order and post-order. 
+In a pre-order traversal, we visit a node, then traverse its children. 
+In an in-order traversal, we traverse the left child, visit a node, then traverse the right child. 
+In a post-order traversal, we traverse both children before visiting. 
+These are very natural to implement recursively. 
+Pre-order and post-order generalize naturally to trees with arbtirary numbers of children. 
+In-order only makes sense for binary trees.
+
 \begin{qparts}
 \item 
 
@@ -584,6 +598,11 @@ void BinaryTree<T>::PostOrderWithoutRecusion(BinaryTreeNode <T> * root){
 \end{enumerate}
 
 \subsection*{层次遍历}
+
+Level Order Traversal. 
+
+A level-order traversal visits every item at level 0, then level 1, then level 2, and so forth.
+
 \begin{enumerate}
     \item   借助外力 stack queue 逻辑
     \begin{lstlisting}[style=cppstyle]
@@ -628,6 +647,20 @@ void BinaryTree<T>::LevelOrder(BinaryTreeNode <T> * root){
 \begin{Solutions}
     \begin{enumerate}
         \item   a recursive definition
+        
+        Trees. 
+        
+        A tree consists of a set of nodes and a set of edges connecting the nodes, 
+        where there is only one path between any two nodes. 
+        A tree is thus a graph with no cycles and all vertices connected.
+
+        Definition. 
+
+        we can define a binary tree as a either a null link or a node with a left link and a right link, 
+        each references to (disjoint) subtrees that are themselves binary trees.
+
+
+
     \end{enumerate}
 
 
@@ -649,7 +682,7 @@ void BinaryTree<T>::LevelOrder(BinaryTreeNode <T> * root){
     \begin{enumerate}
     \item i \& $2^ {i-1}$ floor
     \item k \& $2^k - 1$ all the tree 
-    \item $ n_0 = n_2 + 1 $
+    \item $ n_0 = n_2 + 1 $ 
     \item height = $[\log _2 n ] + 1$
     \item structure of root, Lchild, Rchild 
     \end{enumerate}
@@ -678,35 +711,51 @@ YOUR ANSWER GOES HERE
 
 \end{Solutions}
 
+
+
+
+
 \newpage
 \section*{5.修改数据结构 }
-YOUR ANSWER GOES HERE
+我们利用stack记录路径以便遍历：右边值or访问结点值（后序）、（中 反一下），
+利用Queue记录下一层访问节点。
+有没有方法可以不借助外力？
+修改原来的数据结构！
+
+idea:
+\begin{enumerate}
+    \item 利用现有Data Structure没有用的空间
+    \item 使用标识/取值范围，准确定义
+    \item 利用已有知识，线性表后继
+\end{enumerate}
+
 \begin{qparts}
     \item 
     利用空指针（增加标识
     
     \item
-    三叉链表 
+    三叉链表
 \end{qparts}
 
 \subsection*{1.1 利用空指针}
+发现：
+
+$n$个节点，$2n$个pointer，$n-1$ 有用， $n+1$ 没用。
+
+可以通过增加标识，利用好这些pointer。
 
 \begin{Solutions}
-\begin{enumerate} % for numbers
+\begin{enumerate} 
+\item ThreadBT.java 
 
-\item 结构体
-ArrayDeque.java
+as known as TBT.
 \begin{lstlisting}
-/** Array based list.
-*  @author zilong
-*/
+
+
 
 
 \end{lstlisting}
-
-
 \end{enumerate}
-
 \end{Solutions}
 
 
@@ -718,17 +767,13 @@ ArrayDeque.java
 \item interface 
 List.java
 
-\begin{lstlisting}
+\begin{lstlisting}[style=cppstyle]
 public interface List<Item> 
 \end{lstlisting}
 
 \end{enumerate}
 
 \end{Solutions}
-
-
-
-
 
 
 \clearpage
@@ -779,18 +824,244 @@ public interface List<Item>
     
 \end{Solutions}
 
+\subsection*{application}
+\begin{enumerate}
+\item 编码 code
+\item 压缩非等长
+\item 判定
 
+一般的数据大多呈正态分布，Huffmantree可加快速度
+\item 加密解密 
+
+MD5 加密解密，2次异或
+\end{enumerate}
 
 \newpage
 \section*{7.Binary searching/sorting Tree }
+search -- 不可重复
+sort -- 可重复
+\paragraph{BST}
+A binary search tree (BST) is a binary tree where each node has a Comparable key (and an associated value) 
+and satisfies the restriction that the key in any node is 
+larger than the keys in all nodes in that node's left subtree 
+and smaller than the keys in all nodes in that node's right subtree.
+
+\subparagraph{delete}
+Deletion is quite a bit more complex, since when one removes an internal node, 
+one can’t just let its children fall off, but must re-attach them somewhere in the tree. 
+Obviously, deletion of an external node is easy; 
+just replace it with the null tree (see Figure 6.3(a)). 
+It’s also easy to remove an internal node that 
+is missing one child—just have the other child commit patricide and move up (Figure 6.3(b)). 
+
+When neither child is empty, we can find the successor of the node we want 
+to remove—the first node in the right tree, when it is traversed in inorder. 
+Now that node will contain the smallest key in the right subtree. 
+Furthermore, because it is the first node in inorder, its left child will be null [why?]. 
+Therefore, we can replace that node with its right child 
+and move its key to the node we are removing, as shown in Figure 6.3(c).
+
+\begin{Solutions}
+    \begin{enumerate}
+        \item remove 
+        \begin{lstlisting}[style=javastyle]
+    /** Delete the instance of key from Node that is closest
+    *  to the root and return the modified tree. The nodes of
+    *  the original tree may be modified. */
+    public Node removehelper(Node node, K key) {
+        if (node == null) {
+            return null;
+        }
+        if (key.compareTo(node.key) < 0) {
+            node.left = removehelper(node.left, key);
+        } else if (key.compareTo(node.key) > 0) {
+            node.right = removehelper(node.right, key);
+        } else if (node.left == null) {
+            // Otherwise, we've found key
+            return node.right;
+        } else if (node.right == null) {
+            return node.left;
+        } else {
+            node.right = swapSmallest(node.right, node);
+        }
+        return node;
+    }
+    /** Move the label from the first node in node (in an inorder
+    *  traversal) to node R (over-writing the current label of R),
+    *  remove the first node of node from node, and return the resulting tree. */
+    private Node swapSmallest(Node node, Node R) {
+        if (node.left == null) {
+            R.key = node.key;
+            return node.right;
+        } else {
+            node.left = swapSmallest(node.left, R);
+            return node;
+        }
+    }
+    
+        \end{lstlisting}
+    \end{enumerate}
+\end{Solutions}
+
+
+\begin{tabular}{|l|r|r|r|} \hline   
+    Shape of Tree & Height & add & search \\\hline
+    “Bushy” (Best Case) & $\log N$ & $Θ(logN)$ & $Θ(logN)$ \\
+    “Spindly” (Worst Case) & $N$ & $Θ(N)$ & $Θ(N)$ \\\hline
+\end{tabular}
+
+
+
+最大值最小值
+中序遍历有序
+
+平均查找长度ASL
+insert
+create
+
 
 
 \newpage
-\section*{8.BinaryTree categories}
+\section*{8.BalancedBinarySortingTree categories}
+
+\paragraph{2-3 Tree}
+
+BST where a node can have 2,3 children
+Ensures tree is “bushy” -> height is log(n)
+
+
+2-3 and 2-3-4 trees. Understand how to search and insert. 
+Understand why insertion technique leads to perfect balance.
+
+\subparagraph{Terminology. }
+
+Know that a 2-3 tree is also called a B-Tree of order 3 
+and that a 2-3-4 tree is a B-Tree of order 4. 
+Know that an M-node is a node with M children, 
+e.g. a 4-node is a node containing 3 items and thus with 4 children.
+
+
+\subparagraph{Performance of trees. }
+
+Tree height is between $log_M N$ and $log_2 N$. 
+All paths are of the same height.
+
+
+\subparagraph{1-1 correspondence between LLRBs and 2-3 trees. }
+
+Understand how to map a 2-3 tree to an LLRB and vice versa. 
+You do not need to know how to perform tree operations ‘natively’ on an LLRB.
+
+\paragraph{LLRBs. }
+
+BST such that no node has two red links touching it; perfect black balance; red links lean left.
+
+
+\textbf{Left Leaning Red Black Tree}
+
+
+ This is simply an implementation of a 2-3 Tree with the same ideas. 
+ Be able to convert between a 2-3 Tree and a LLRB tree. 
+ We use red links to indicate two nodes that would be in the same 2-3 Node. 
+ In a left leaning RB tree, we arbitrarily enforce that edges are always to the left (for convenience).
+
+
+\subparagraph{Properties of LLRB's}
+
+Here are the properties of LLRB's:
+
+1-1 correspondence with 2-3 trees.
+
+No node has 2 red links.
+
+There are no red right-links.
+
+Every path from root to leaf has same number of black links (because 2-3 trees have same number of links to every leaf).
+
+Height is no more than 2x height of corresponding 2-3 tree.
+
+\subparagraph{LLRB get}
+
+Exactly the same as regular BST get.
+
+\subparagraph{LLRB performance. }
+
+Perfect black balance ensures worst case performance for get and insert is ~ 2 $log_2 N$.
+
+
+\subparagraph{LLRB insert. }
+
+You are not responsible for knowing how to insert into an LLRB using rotations and color flipping. 
+However, you should know how to convert back and forth between 2-3 trees and LLRBs, 
+and you should also know how to insert into 2-3 trees. 
+Thus, you should know effectively how one can insert into an LLRB.
+
+
+\subparagraph{LLRB Tree}
+Properties of a 2-3 tree, but implemented like a BST
+
+
+\subparagraph{Tree rotaions}
+We rotateLeft or rotateRight on a node, creating a different but valid BST with the same elements. 
+Notice when we rotateLeft(G) we move the node G to be the left child of the new root.
+
+
+There are two important propertires for LLRBs:
+
+No node ever has 2 red links (It wouldn’t be a valid node in a 2-3 Tree if it did)
+Every path from the root to a leaf has the same number of black links. 
+This is because every leaf in a 2-3 tree has same numbers of links from root. Therefore, the tree is balanced.
+LLRB operations Always insert with a red link at the correct location. 
+Then use the following three operations to “fix” or LLRB tree. See slides for visual.
+
+If there is a right leaning red link, rotate that node left.
+If there are two consecutive left leaning links, rotate right on the top node.
+If there is a node with two red links to children, flip all links with that node.
+\newpage
+\section*{9.BinaryTree categories}
+
+\newpage
+\section*{10.heap}
+
+
+
+
+\subparagraph{Priority Queue. }
+
+A Max Priority Queue (or PQ for short) is an ADT that supports at least the insert and delete-max operations. A MinPQ supposert insert and delete-min.
+
+Tree Representations. Know that there are many ways to represent a tree, and that we use Approach 3b (see lecture slides) for representing heaps, since we know they are complete.
+
+Running times of various PQ implementations. Know the running time of the three primary PQ operations for an unordered array, ordered array, and heap implementation.
+
+\subparagraph{Heap definitions}
+
+The binary heap is a data structure that can efficiently support the basic priority-queue operations. 
+In a binary heap, the keys are stored in an array such that each key is guaranteed to be larger than 
+(or equal to) the keys at two other specific positions. 
+In turn, each of those keys must be larger than (or equal to) two ad- ditional keys, and so forth. 
+This ordering is easy to see if we view the keys as being in a binary tree structure 
+with edges from each key to the two keys known to be smaller.
+
+Heaps. A max (min) heap is an array representation of a binary tree such that every node is larger (smaller) than all of its children. This definition naturally applies recursively, i.e. a heap of height 5 is composed of two heaps of height 4 plus a parent.
+
+
 
 
 \newpage
-\section*{9.BinaryTree in java}
+\section*{11.Tree and forest}
+
+
+parent 
+
+child 
+
+child sibling
+
+
+
+\newpage
+\section*{.BinaryTree in java}
 
 %\fi
 \end{document}

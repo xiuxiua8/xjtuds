@@ -14,13 +14,13 @@
 %\def\Name{zilong}
 \def\Name{王子隆}  % Your name 定义了一个名为\Name的变量，它的内容是"PUT SOMETHING HERE"。通常这个变量会在文档中被调用以插入相应的信息。
 \def\SID{2221411126}  % Your student ID number 定义了一个名为\SID的变量，它的内容也是"PUT SOMETHING HERE"。
-\def\Homework{1} % Number of Homework 定义了一个名为\Homework的变量，它的内容是"n"，表示作业编号。
+\def\Lab{11} % Number of Lab 定义了一个名为\Lab的变量，它的内容是"n"，表示编号。
 \def\Session{Autumn 2023} %定义了一个名为\Session的变量，它的内容是"Autumn 2023"，表示学期。
 
 
-\title{DS--Autumn 2023 --- Homework \Homework Solutions} %设置了文档的标题，包括课程名、学期和作业编号。
+\title{DS--Autumn 2023 --- Lab \Lab    Solutions} %设置了文档的标题，包括课程名、学期和作业编号。
 \author{\Name, SID \SID} %设置了文档的作者信息，使用了之前定义的\Name和\SID变量。
-\markboth{DS--\Session\  Homework \Homework\ \Name}{DS--\Session\ Homework \Homework\ \Name} %设置了页眉的内容。
+\markboth{DS--\Session\  Lab \Lab\ \Name}{DS--\Session\ Lab \Lab\ \Name} %设置了页眉的内容。
 \pagestyle{myheadings} %设置了页眉的内容。
 \date{\today} %清空了默认的日期显示。
 
@@ -29,7 +29,7 @@
 \newenvironment{Solutions}{\par{\bf Solutions}:}%{\endSolutionsmark\smallskip} %定义了一个新的环境Solutions，用于书写数学证明。
 
 
-\lstdefinestyle{mystyle}{ %%定义了一个样式mystyle，指定了Java语言，设定了代码的基本样式、注释样式、关键词样式等等
+\lstdefinestyle{javastyle}{ %%定义了一个样式mystyle，指定了Java语言，设定了代码的基本样式、注释样式、关键词样式等等
     language=Java,
     basicstyle=\ttfamily\small, % 设置代码字体为大一些
     commentstyle=\color{OliveGreen},
@@ -42,6 +42,18 @@
     tabsize=4
 }
 
+\lstdefinestyle{cppstyle}{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    commentstyle=\color{OliveGreen},
+    keywordstyle=\color{RoyalBlue},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4
+}
 
 \textheight=9in
 \textwidth=6.5in
@@ -50,7 +62,6 @@
 \evensidemargin=0.25in %设置了页面的尺寸和边距。
 
 
-\lstset{style=mystyle}
 
 \begin{document}
 \maketitle
@@ -59,30 +70,25 @@
 
 \begin{abstract}
     %Abstract goes here...
-    线性表功能实现及应用
-    
-    Merge(L1,L2)
+    1、问题描述：
 
-    Dispose (L1, 12)
+        利用哈夫曼编码进行信息通信可以大大提高信道利用率，缩短信息传输时间，降低传输成本。
+        但是，要求在发送端通过一个编码系统对传输数据预先编码（压缩）；在接收端将传来的数据进行译码（解压缩复原）。
+        试为这样的通信站编写一个哈夫曼编译码系统---哈夫曼压缩/解压缩算法。
 
-    Sort (L)
-  
-    Insert(L,a,b) 不/带头链表L,在元素值a之前插入b
+    2、基本要求：
 
-    应用 一元多项式的加減法（链表）
+        1）通信内容可以是任意的多媒体文件；
+        2）自己设定字符大小，统计该文件中不同字符的种类（字符集、个数）、出现频率（在该文件中）；
+        3）构建相应的哈夫曼树，并给出个字符的哈夫曼编码；
+        4）对源文件进行哈夫曼压缩编码形成新的压缩后文件（包括哈夫曼树）；
+        5）编写解压缩文件对压缩后文件进行解码还原成源文件。
 
+    3、实现提示：
 
-    %插入元素通过覆盖元素，并且向后增加节点
+        不同源文件形成的压缩文件中应该包含相应的哈夫曼树结构，以便解压缩系统直接译码还原之。
+        参考哈夫曼树一节内容，但要求编写的软件能完整的对任意文件完成压缩/解压缩。  
 
-    检测环形链表证明链表有无环
-
-    增加bool数据类型判断环形链表是否遍历完毕
-
-    hanoi塔
-
-    数据库（交并差叉积）
-    
-    半矩阵存储
 
 \end{abstract}
 
@@ -92,109 +98,49 @@
 
 
 
-
-
-
-
-
-
-\section*{1. 线性表功能实现及应用}
+\section*{1. 数据结构实现}
 \begin{qparts}
-    \item 
-    功能实现
+    \item 功能实现
+
+
+    \item 应用 
     
-    Merge(L1,L2)
-
-    Dispose (L1, 12)
-
-    Sort (L)
-  
-    Insert(L,a,b) 不/带头链表L,在元素值a之前插入b
-
-    \item
-    应用 
-    
-    一元多项式的加減法（链表）
 \end{qparts}
 
-\subsection*{1.1 数组、链表、双向循环链表建立}
+
+
+\subsection*{1.1 abc}
 
 \begin{Solutions}
 \begin{enumerate} % for numbers
-
-\item 数组
+\item 1
 ArrayDeque.java
 \begin{lstlisting}
-/** Array based list.
-*  @author zilong
-*/
-
 
 \end{lstlisting}
 
-\item 双向循环链表
-LinkedListDeque.java
+\item 2
+
 \begin{lstlisting}
-/** DLLists based list.
-*  @author zilong
-*/
-
-public class LinkedListDeque<T> implements List<T>{
-
-    
-
-}
 
 \end{lstlisting}
+
 
 \end{enumerate}
-
 \end{Solutions}
 
 
-\subsection*{1.2 应用 }
 
-\begin{Solutions}
-\begin{enumerate}
-\item interface 
-List.java
-\begin{lstlisting}
-public interface List<Item> 
-\end{lstlisting}
 
-\end{enumerate}
 
-\end{Solutions}
 
-\newpage
+
 
 \iffalse
+\newpage
 \section*{2.}
-\begin{qparts}
-\item
 YOUR ANSWER GOES HERE
-
-\end{qparts}
-
-
-\newpage
-\section*{3.}
-YOUR ANSWER GOES HERE
-
-
-\newpage
-\section*{4.}
-YOUR ANSWER GOES HERE
-
-
-\newpage
-\section*{5.}
-YOUR ANSWER GOES HERE
-
-
-\newpage
-\section*{6.}
-YOUR ANSWER GOES HERE
-
 \fi
+
+
 \end{document}
