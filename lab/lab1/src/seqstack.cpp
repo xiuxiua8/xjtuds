@@ -1,5 +1,5 @@
 #include <iostream>
-
+//#include "stuff.cpp"
 template<class Type>
 class SeqStack{
     private:
@@ -64,6 +64,23 @@ class SeqStack{
         Type* GetStackArray() const {
             return base;
         }
+        const Type* GetStackArray1() const {
+            // Return a copy of the array to prevent external modification
+            Type* copyArray = new Type[maxsize];
+            std::copy(base, base + maxsize, copyArray);
+            return copyArray;
+        }
+
+        Type &End() const{ 
+            if (!IsEmpty()) {
+                return base[0];
+            } else { 
+                return base[0]; //todosomething
+            }
+        }
+
+
+
 
 };
 
