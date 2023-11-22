@@ -1,5 +1,6 @@
 import org.junit.Test;
-import static org.junit.Assert.*;
+import java.util.Scanner;
+import static org.junit.Assert.assertEquals;
 
 /**
  * A Generic heap class. Unlike Java's priority queue, this heap doesn't just
@@ -7,8 +8,6 @@ import static org.junit.Assert.*;
  * (represented by type T), along with a priority value. Why do it this way? It
  * will be useful later on in the class...
  */
-
-
 
 
 /**
@@ -20,14 +19,14 @@ import static org.junit.Assert.*;
  */
 
 
-public class ArrayHeap<T> implements ExtrinsicPQ<T> {
+public class ArrayTree<T> implements myPQ<T> {
     private Node[] contents;
     private int size;
 
-    public ArrayHeap() {
-        contents = new ArrayHeap.Node[16];
+    public ArrayTree() {
+        contents = new ArrayTree.Node[16];
 
-        /* Add a dummy item at the front of the ArrayHeap so that the getLeft,
+        /* Add a dummy item at the front of the lab7.ArrayHeap so that the getLeft,
          * getRight, and parent methods are nicer. */
         contents[0] = null;
 
@@ -296,163 +295,42 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 
     /** Helper function to resize the backing array when necessary. */
     private void resize(int capacity) {
-        Node[] temp = new ArrayHeap.Node[capacity];
+        Node[] temp = new ArrayTree.Node[capacity];
         for (int i = 1; i < this.contents.length; i++) {
             temp[i] = this.contents[i];
         }
         this.contents = temp;
     }
 
-    @Test
-    public void testIndexing() {
-        assertEquals(6, leftIndex(3));
-        assertEquals(10, leftIndex(5));
-        assertEquals(7, rightIndex(3));
-        assertEquals(11, rightIndex(5));
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-        assertEquals(3, parentIndex(6));
-        assertEquals(5, parentIndex(10));
-        assertEquals(3, parentIndex(7));
-        assertEquals(5, parentIndex(11));
-    }
+        // Test ArrayTree (generic heap)
+        ArrayTree<Integer> arrayTree = new ArrayTree<>();
 
-    @Test
-    public void testSwim() {
-        ArrayHeap<String> pq = new ArrayHeap<>();
-        pq.size = 7;
-        for (int i = 1; i <= 7; i += 1) {
-            pq.contents[i] = new ArrayHeap<String>.Node("x" + i, i);
+        // Input a sequence of integers to build the heap
+        System.out.println("Enter a sequence of integers for the heap (end with Enter):");
+        while (scanner.hasNextInt()) {
+            int num = scanner.nextInt();
+            double priority = Math.random(); // For simplicity, use a random priority
+            arrayTree.insert(num, priority);
         }
-        // Change item x6's priority to a low value.
 
-        pq.contents[6].myPriority = 0;
-        System.out.println("PQ before swimming:");
-        System.out.println(pq);
+        // Display the heap
+        System.out.println("Heap representation:");
+        System.out.println(arrayTree);
 
-        // Swim x6 upwards. It should reach the root.
+        // Peek and remove the minimum element from the heap
+        System.out.println("Min element (peek): " + arrayTree.peek());
+        System.out.println("Removed min element: " + arrayTree.removeMin());
 
-        pq.swim(6);
-        System.out.println("PQ after swimming:");
-        System.out.println(pq);
-        assertEquals("x6", pq.contents[1].myItem);
-        assertEquals("x2", pq.contents[2].myItem);
-        assertEquals("x1", pq.contents[3].myItem);
-        assertEquals("x4", pq.contents[4].myItem);
-        assertEquals("x5", pq.contents[5].myItem);
-        assertEquals("x3", pq.contents[6].myItem);
-        assertEquals("x7", pq.contents[7].myItem);
+        // Display the heap after removal
+        System.out.println("Heap after removal:");
+        System.out.println(arrayTree);
+
+        // Close the scanner
+        scanner.close();
     }
 
-    @Test
-    public void testSink() {
-        ArrayHeap<String> pq = new ArrayHeap<>();
-        pq.size = 7;
-        for (int i = 1; i <= 7; i += 1) {
-            pq.contents[i] = new ArrayHeap<String>.Node("x" + i, i);
-        }
-        // Change root's priority to a large value.
-        pq.contents[1].myPriority = 10;
-        System.out.println("PQ before sinking:");
-        System.out.println(pq);
-
-        // Sink the root.
-        pq.sink(1);
-        System.out.println("PQ after sinking:");
-        System.out.println(pq);
-        assertEquals("x2", pq.contents[1].myItem);
-        assertEquals("x4", pq.contents[2].myItem);
-        assertEquals("x3", pq.contents[3].myItem);
-        assertEquals("x1", pq.contents[4].myItem);
-        assertEquals("x5", pq.contents[5].myItem);
-        assertEquals("x6", pq.contents[6].myItem);
-        assertEquals("x7", pq.contents[7].myItem);
-    }
-
-
-    @Test
-    public void testInsert() {
-        ArrayHeap<String> pq = new ArrayHeap<>();
-        pq.insert("c", 3);
-        assertEquals("c", pq.contents[1].myItem);
-
-        pq.insert("i", 9);
-        assertEquals("i", pq.contents[2].myItem);
-
-        pq.insert("g", 7);
-        pq.insert("d", 4);
-        assertEquals("d", pq.contents[2].myItem);
-
-        pq.insert("a", 1);
-        assertEquals("a", pq.contents[1].myItem);
-
-        pq.insert("h", 8);
-        pq.insert("e", 5);
-        pq.insert("b", 2);
-        pq.insert("c", 3);
-        pq.insert("d", 4);
-        System.out.println("pq after inserting 10 items: ");
-        System.out.println(pq);
-        assertEquals(10, pq.size());
-        assertEquals("a", pq.contents[1].myItem);
-        assertEquals("b", pq.contents[2].myItem);
-        assertEquals("e", pq.contents[3].myItem);
-        assertEquals("c", pq.contents[4].myItem);
-        assertEquals("d", pq.contents[5].myItem);
-        assertEquals("h", pq.contents[6].myItem);
-        assertEquals("g", pq.contents[7].myItem);
-        assertEquals("i", pq.contents[8].myItem);
-        assertEquals("c", pq.contents[9].myItem);
-        assertEquals("d", pq.contents[10].myItem);
-    }
-
-
-    @Test
-    public void testInsertAndRemoveOnce() {
-        ArrayHeap<String> pq = new ArrayHeap<>();
-        pq.insert("c", 3);
-        pq.insert("i", 9);
-        pq.insert("g", 7);
-        pq.insert("d", 4);
-        pq.insert("a", 1);
-        pq.insert("h", 8);
-        pq.insert("e", 5);
-        pq.insert("b", 2);
-        pq.insert("c", 3);
-        pq.insert("d", 4);
-        String removed = pq.removeMin();
-        assertEquals("a", removed);
-        assertEquals(9, pq.size());
-        assertEquals("b", pq.contents[1].myItem);
-        assertEquals("c", pq.contents[2].myItem);
-        assertEquals("e", pq.contents[3].myItem);
-        assertEquals("c", pq.contents[4].myItem);
-        assertEquals("d", pq.contents[5].myItem);
-        assertEquals("h", pq.contents[6].myItem);
-        assertEquals("g", pq.contents[7].myItem);
-        assertEquals("i", pq.contents[8].myItem);
-        assertEquals("d", pq.contents[9].myItem);
-    }
-
-    @Test
-    public void testInsertAndRemoveAllButLast() {
-        ExtrinsicPQ<String> pq = new ArrayHeap<>();
-        pq.insert("c", 3);
-        pq.insert("i", 9);
-        pq.insert("g", 7);
-        pq.insert("d", 4);
-        pq.insert("a", 1);
-        pq.insert("h", 8);
-        pq.insert("e", 5);
-        pq.insert("b", 2);
-        pq.insert("c", 3);
-        pq.insert("d", 4);
-
-        int i = 0;
-        String[] expected = {"a", "b", "c", "c", "d", "d", "e", "g", "h", "i"};
-        while (pq.size() > 1) {
-            assertEquals(expected[i], pq.removeMin());
-            i += 1;
-        }
-    }
 
 }

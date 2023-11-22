@@ -1,9 +1,9 @@
 # Fdb version 3
-["pdflatex"] 1699844726 "d:/Documents/course/xjtuDS/lab/lab2/tex/lab2.tex" "lab2.pdf" "lab2" 1699844729
+["pdflatex"] 1700561117 "d:/Documents/course/xjtuDS/lab/lab2/tex/lab2.tex" "lab2.pdf" "lab2" 1700561120
   "c:/Windows/Fonts/msyh.ttc" 1692858156 19701556 07c864a5b15e68fa47639738197fae38 ""
   "c:/Windows/Fonts/simhei.ttf" 1651842600 9753388 6abc0fcfbaa40600f9cecca3afeb3aa7 ""
   "c:/Windows/Fonts/simsun.ttc" 1692858156 18008680 490583a172d4371a68d1e0526a6bca81 ""
-  "d:/Documents/course/xjtuDS/lab/lab2/tex/lab2.tex" 1699844722 5295 237e8e4451ce7a71ad1cbf27e543d77f ""
+  "d:/Documents/course/xjtuDS/lab/lab2/tex/lab2.tex" 1699844966 5291 d8c961659551d9127f0442499f19ef31 ""
   "d:/software/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1672740129 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "d:/software/texlive/2022/texmf-dist/fonts/sfd/ttf2pk/UGBK.sfd" 1672741616 182544 bcd31d5d273400b38612a969fcab55f9 ""
   "d:/software/texlive/2022/texmf-dist/fonts/sfd/ttf2pk/Unicode.sfd" 1672741616 103212 c249c63d38b8b55408aee52d643b0c18 ""
@@ -181,8 +181,8 @@
   "d:/software/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1672741847 4448440 e8acd55875a9643e133461d39b68be29 ""
   "d:/software/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1672741951 2826526 e2165b8028478690cf6d797abc6a69ec ""
   "d:/software/texlive/2022/texmf.cnf" 1672741834 713 e69b156964470283e0530f5060668171 ""
-  "lab2.aux" 1699844728 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "lab2.tex" 1699844722 5295 237e8e4451ce7a71ad1cbf27e543d77f ""
+  "lab2.aux" 1700561119 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "lab2.tex" 1699844966 5291 d8c961659551d9127f0442499f19ef31 ""
   (generated)
   "lab2.aux"
   "lab2.log"
