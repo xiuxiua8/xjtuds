@@ -16,24 +16,9 @@ struct StackItem {
 };
 
 
-/*
 void printSolution(Stuff<int>* set[], SeqStack<StackItem> solution, int size) {
-    printf("(");
-    for (int i = 0; i < size; i++) {
-        printf("%d", set[solution.Pop().index - 1]->mysize());
-        if (i < size - 1) {
-            printf(",");
-        }
-    }
-    printf(")\n");
-}*/
-
-
-
-
-
-void printSolution(Stuff<int>* set[], SeqStack<StackItem> solution, int size) {
-    const StackItem* list = solution.GetStackArray1();
+    //const StackItem* list = solution.GetStackArray1();
+    const StackItem* list = solution.base;
     printf("(");
     for (int i = 0; i < size; i++) {
         printf("%d", set[list[i].index]->mysize());
@@ -44,8 +29,6 @@ void printSolution(Stuff<int>* set[], SeqStack<StackItem> solution, int size) {
     printf(")\n");
 
 }
-
-
 
 
 void packup(Stuff<int>* set[], std::string log, int stuffnum, int T) {
@@ -78,7 +61,9 @@ void packup(Stuff<int>* set[], std::string log, int stuffnum, int T) {
             if (currentIndex == stuffnum - 1) {
                 stack.Pop();
                 currentVolume -= set[currentIndex]->mysize();
-                currentIndex = stack.GetTop().index;
+                if (!stack.IsEmpty()) {
+                    currentIndex = stack.GetTop().index;
+                }
                 currentSize--;
             }
             stack.Pop();
@@ -134,15 +119,9 @@ int main() {
     printf("Enter the target volume T: ");
     scanf("%d", &T);*/
 
-
-
     printf("Possible subsets that sum up to %d:\n", T);
     packup(stuffSet, log, stuffNum, T);
-
     printf("end! ");
 
     return 0;
-
-
-
 }
