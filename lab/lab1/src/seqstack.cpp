@@ -3,10 +3,11 @@
 template<class Type>
 class SeqStack{
     private:
-        Type *base;
+        
         int maxsize;   
         int top; 
     public: 
+        Type *base;
         SeqStack(int size) {
             maxsize = size;
             base = new Type[maxsize];
@@ -14,7 +15,7 @@ class SeqStack{
         }
 
         ~SeqStack() {
-            delete[] base;
+            //delete[] base;
         }
 
         int IsEmpty() const {
@@ -47,8 +48,8 @@ class SeqStack{
             if (!IsEmpty()) {
                 return base[top--];
             } else { 
-                std::cout << "the stack is empty!" << std::endl;
-                throw std::out_of_range("Stack is empty");
+                //std::cout << "the stack is empty!" << std::endl;
+                //throw std::out_of_range("Stack is empty");
             }
         }
         
@@ -58,12 +59,14 @@ class SeqStack{
             } else { 
                 std::cout << "the stack is empty!" << std::endl;
                 throw std::out_of_range("Stack is empty");
+
             }
         }
 
         Type* GetStackArray() const {
             return base;
         }
+
         const Type* GetStackArray1() const {
             // Return a copy of the array to prevent external modification
             Type* copyArray = new Type[maxsize];
