@@ -1,7 +1,7 @@
 
 
 import java.util.Scanner;
-public class ArrayBinaryTree<T> {
+public class ArrayBinaryTree<T extends Comparable<T>>{
     private Object[] contents;
     private int size;
 
@@ -23,7 +23,7 @@ public class ArrayBinaryTree<T> {
     }
 
     private boolean inBounds(int index) {
-        return index > 0 && index <= size;
+        return index > 0 && index <= contents.length;
     }
 
     private  Object getNode(int index) {
@@ -46,24 +46,53 @@ public class ArrayBinaryTree<T> {
     }
 
     public void insert(T item) {
-        if (size + 1 == contents.length) {
-            resize(contents.length * 2);
-        }
 
         size += 1;
-        contents[size] = item;
+        //contents[size] = item;
+        inserthelper(item, 1);
     }
 
-    public void remove(T item) {
-        for (int i = 1; i <= size; i++) {
-            if (contents[i].equals(item)) {
-                swap(i, size);
-                contents[size] = null;
-                size -= 1;
+    private void inserthelper(T item, int root) {
+        if (root >= contents.length) {
+            resize(contents.length * 2);
+        }
+        if (contents[root] == null) {
+            contents[root] = item;
+        } else {
+            if (item.compareTo((T) contents[root]) > 0) {
+                inserthelper(item, rightIndex(root));
+            } else if (item.compareTo((T) contents[root]) < 0) {
+                inserthelper(item, leftIndex(root));
+            } else {
+                // Item is already in the tree
+                size -= 1; // Decrement size as the item is not actually inserted
                 return;
             }
         }
     }
+
+
+
+    public void remove(T item) {
+        Object[] temp = new Object[16];
+        //System.arraycopy(contents, 0, temp, 0, contents.length);
+        //System.arraycopy(contents, 0, temp, 0, contents.length);
+        int j = 0;
+        for (int i = 1; i < contents.length; i += 1) {
+            if (contents[i] != null) {
+                if (!contents[i].equals(item)) {
+                    temp[j]= contents[i];
+                    j++;
+                }
+            }
+        }
+        contents = new Object[16];
+        size = 0;
+        for (int k = 0; k < j; k += 1) {
+            insert((T) temp[k]);
+        }
+    }
+
 
     public void inOrderTraversal() {
         inOrderTraversal(1);
@@ -72,9 +101,17 @@ public class ArrayBinaryTree<T> {
 
     private void inOrderTraversal(int index) {
         if (inBounds(index)) {
-            inOrderTraversal(leftIndex(index));
+            if (inBounds(leftIndex(index))) {
+                if (contents[leftIndex(index)] != null) {
+                    inOrderTraversal(leftIndex(index));
+                }
+            }
             System.out.print(contents[index] + " ");
-            inOrderTraversal(rightIndex(index));
+            if (inBounds(rightIndex(index))) {
+                if (contents[rightIndex(index)] != null) {
+                    inOrderTraversal(rightIndex(index));
+                }
+            }
         }
     }
 
@@ -104,9 +141,20 @@ public class ArrayBinaryTree<T> {
         }
     }
 
+    public double averageSearchLength() {
+        return (double) depthSum(1, 0) / size;
+    }
+
+    private int depthSum(int index, int depth) {
+        if (!inBounds(index) || getNode(index) == null) {
+            return 0;
+        }
+        return depth + depthSum(leftIndex(index), depth + 1) + depthSum(rightIndex(index), depth + 1);
+    }
+
     private void resize(int capacity) {
         Object[] temp = new Object[capacity];
-        System.arraycopy(contents, 0, temp, 0, size + 1);
+        System.arraycopy(contents, 0, temp, 0, contents.length);
         contents = temp;
     }
 
@@ -171,13 +219,10 @@ public class ArrayBinaryTree<T> {
         System.out.print("In-order traversal: ");
         binaryTree.inOrderTraversal();
 
-        // Pre-order traversal
-        System.out.print("Pre-order traversal: ");
-        binaryTree.preOrderTraversal();
+        System.out.println("Average Search Length: " + binaryTree.averageSearchLength());
 
-        // Post-order traversal
-        System.out.print("Post-order traversal: ");
-        binaryTree.postOrderTraversal();
+
+
 
         // Remove a node from the binary tree
         System.out.println("Enter an integer to remove from the binary tree:");
