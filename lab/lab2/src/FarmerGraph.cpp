@@ -56,17 +56,18 @@ public:
         std::cout << ")";
     }
 
-    // Perform BFS to find a path from startState to goalState
+
+    // Perform BFS to find a path from goalState to startState
     void findSolution(int startState, int goalState) {
         std::queue<int> Q;
-        Q.push(startState);
+        Q.push(goalState);
 
         int pred[NUM_STATES];
         for (int i = 0; i < NUM_STATES; i++) {
             pred[i] = -1;
         }
 
-        Visited[startState] = true;
+        Visited[goalState] = true;
 
         while (!Q.empty()) {
             int currentState = Q.front();
@@ -82,14 +83,35 @@ public:
         }
 
         // Print the solution path
-        int currentState = goalState;
+        int currentState = startState;
         while (currentState != -1) {
             printState(currentState);
-            std::cout << " <- ";
+            std::cout << " -> ";
             currentState = pred[currentState];
         }
-        std::cout << "Initial State" << std::endl;
+        std::cout << "target State" << std::endl;
+
+        currentState = startState;
+        int nextState;
+        int count = 0;
+        while (currentState != -1) {
+            nextState = pred[currentState];
+            int diff = currentState ^ nextState;
+            count ++;
+            if (diff == 8) {
+                std::cout << "第" << count << "步，"<< "农夫只身到达对岸。" << std::endl;         
+            } else if (diff == 9) {
+                std::cout << "第" << count << "步，"<< "农夫带羊到达对岸。" << std::endl;   
+            } else if (diff == 10) {
+                std::cout << "第" << count << "步，"<< "农夫带菜到达对岸。" << std::endl;   
+            } else if (diff == 12) {
+                std::cout << "第" << count << "步，"<< "农夫带狼到达对岸。" << std::endl;
+            }
+            currentState = nextState;
+        }
+        std::cout << "结束！" << std::endl;
     }
+
 };
 
 int main() {
