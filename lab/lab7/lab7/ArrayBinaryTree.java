@@ -1,7 +1,7 @@
 
 
 import java.util.Scanner;
-public class ArrayBinaryTree<T extends Comparable<T>>{
+public class ArrayBinaryTree<T extends Comparable<T>> {
     private Object[] contents;
     private int size;
 
@@ -81,7 +81,7 @@ public class ArrayBinaryTree<T extends Comparable<T>>{
         for (int i = 1; i < contents.length; i += 1) {
             if (contents[i] != null) {
                 if (!contents[i].equals(item)) {
-                    temp[j]= contents[i];
+                    temp[j] = contents[i];
                     j++;
                 }
             }
@@ -123,8 +123,16 @@ public class ArrayBinaryTree<T extends Comparable<T>>{
     private void preOrderTraversal(int index) {
         if (inBounds(index)) {
             System.out.print(contents[index] + " ");
-            preOrderTraversal(leftIndex(index));
-            preOrderTraversal(rightIndex(index));
+            if (inBounds(leftIndex(index))) {
+                if (contents[leftIndex(index)] != null) {
+                    preOrderTraversal(leftIndex(index));
+                }
+            }
+            if (inBounds(rightIndex(index))) {
+                if (contents[rightIndex(index)] != null) {
+                    preOrderTraversal(rightIndex(index));
+                }
+            }
         }
     }
 
@@ -135,8 +143,16 @@ public class ArrayBinaryTree<T extends Comparable<T>>{
 
     private void postOrderTraversal(int index) {
         if (inBounds(index)) {
-            postOrderTraversal(leftIndex(index));
-            postOrderTraversal(rightIndex(index));
+            if (inBounds(leftIndex(index))) {
+                if (contents[leftIndex(index)] != null) {
+                    postOrderTraversal(leftIndex(index));
+                }
+            }
+            if (inBounds(rightIndex(index))) {
+                if (contents[rightIndex(index)] != null) {
+                    postOrderTraversal(rightIndex(index));
+                }
+            }
             System.out.print(contents[index] + " ");
         }
     }
@@ -183,8 +199,6 @@ public class ArrayBinaryTree<T extends Comparable<T>>{
         }
     }
 
-
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -210,7 +224,6 @@ public class ArrayBinaryTree<T extends Comparable<T>>{
             }
         }
 
-
         // Display the binary tree
         System.out.println("Binary Tree representation:");
         System.out.println(binaryTree);
@@ -221,9 +234,6 @@ public class ArrayBinaryTree<T extends Comparable<T>>{
 
         System.out.println("Average Search Length: " + binaryTree.averageSearchLength());
 
-
-
-
         // Remove a node from the binary tree
         System.out.println("Enter an integer to remove from the binary tree:");
         int numToRemove = scanner.nextInt();
@@ -232,6 +242,10 @@ public class ArrayBinaryTree<T extends Comparable<T>>{
         // Display the binary tree after removal
         System.out.println("Binary Tree representation after removal:");
         System.out.println(binaryTree);
+
+        // In-order traversal
+        System.out.print("In-order traversal: ");
+        binaryTree.inOrderTraversal();
 
         // Close the scanner
         scanner.close();

@@ -1,7 +1,7 @@
 
 import java.util.Set;
 
-public interface myMap<K, V> extends Iterable<K> {
+public interface MyMap<K, V> extends Iterable<K> {
     /** Removes all the mappings from this map. */
     void clear();
 
@@ -24,13 +24,10 @@ public interface myMap<K, V> extends Iterable<K> {
     /* Returns a Set view of the keys contained in this map. */
     Set<K> keySet();
 
-    /* Removes the mapping for the specified key from this map if present.
-     * Not required for Lab 9. If you don't implement this, throw an
-     * UnsupportedOperationException. */
+    /* Removes the mapping for the specified key from this map if present. */
     K remove(K key);
 
     /* Removes the entry for the specified key only if it is currently mapped to
-     * the specified value. Not required for Lab 9. If you don't implement this,
-     * throw an UnsupportedOperationException.*/
+     * the specified value. */
     K remove(K key, V value);
 }

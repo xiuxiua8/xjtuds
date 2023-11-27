@@ -4,7 +4,7 @@
  * priorities are supplied as an argument during insertion and can be
  * changed.
  */
-public interface myPQ<T> {
+public interface MyPQ<T> {
 
     /* Inserts an item with the given priority value. This is also known as "enqueue", or "offer". */
     public void insert(T item, double priority);

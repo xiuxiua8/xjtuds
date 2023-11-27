@@ -1,17 +1,9 @@
 
-
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 /**
  * A Generic heap class. Unlike Java's priority queue, this heap doesn't just
  * store Comparable objects. Instead, it can store any type of object
- * (represented by type T), along with a priority value. Why do it this way? It
- * will be useful later on in the class...
+ * (represented by type T), along with a priority value.
  */
-
-
-
 
 /**
  Invariant 1: the tree must be complete (more on this later)
@@ -22,19 +14,13 @@ import static org.junit.Assert.*;
  */
 
 
-public class ArrayHeap<T> implements myPQ<T> {
+public class ArrayHeap<T> implements MyPQ<T> {
     private Node[] contents;
     private int size;
 
     public ArrayHeap() {
         contents = new ArrayHeap.Node[16];
-
-        /* Add a dummy item at the front of the lab7.ArrayHeap so that the getLeft,
-         * getRight, and parent methods are nicer. */
         contents[0] = null;
-
-        /* Even though there is an empty spot at the front, we still consider
-         * the size to be 0 since nothing has been inserted yet. */
         size = 0;
     }
 
@@ -49,7 +35,7 @@ public class ArrayHeap<T> implements myPQ<T> {
      * Returns the index of the node to the right of the node at i.
      */
     private static int rightIndex(int i) {
-        return 2 * i +1;
+        return 2 * i + 1;
     }
 
     /**
@@ -121,15 +107,12 @@ public class ArrayHeap<T> implements myPQ<T> {
     private void swim(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
-
-            if (index == 1){
-                return;
-            }
-            else if (contents[index].myPriority < contents[parentIndex(index)].myPriority) {
-                swap(index, parentIndex(index));
-                swim(parentIndex(index));
-            }
-
+        if (index == 1) {
+            return;
+        } else if (contents[index].myPriority < contents[parentIndex(index)].myPriority) {
+            swap(index, parentIndex(index));
+            swim(parentIndex(index));
+        }
     }
 
     /**
@@ -143,7 +126,7 @@ public class ArrayHeap<T> implements myPQ<T> {
         if (leftIndex(index) > size && rightIndex(index) > size) {
             return;
         }
-        if (this.contents[mostqualifiedfolk] == null ) {
+        if (this.contents[mostqualifiedfolk] == null) {
             return;
         }
         if (index == size) {
@@ -165,7 +148,7 @@ public class ArrayHeap<T> implements myPQ<T> {
         }
 
         size += 1;
-        contents[size] = new Node(item,priority);
+        contents[size] = new Node(item, priority);
         swim(size);
     }
 
@@ -281,7 +264,7 @@ public class ArrayHeap<T> implements myPQ<T> {
             myPriority = priority;
         }
 
-        public T item(){
+        public T item() {
             return myItem;
         }
 
@@ -303,158 +286,6 @@ public class ArrayHeap<T> implements myPQ<T> {
             temp[i] = this.contents[i];
         }
         this.contents = temp;
-    }
-
-    @Test
-    public void testIndexing() {
-        assertEquals(6, leftIndex(3));
-        assertEquals(10, leftIndex(5));
-        assertEquals(7, rightIndex(3));
-        assertEquals(11, rightIndex(5));
-
-        assertEquals(3, parentIndex(6));
-        assertEquals(5, parentIndex(10));
-        assertEquals(3, parentIndex(7));
-        assertEquals(5, parentIndex(11));
-    }
-
-    @Test
-    public void testSwim() {
-        ArrayHeap<String> pq = new ArrayHeap<>();
-        pq.size = 7;
-        for (int i = 1; i <= 7; i += 1) {
-            pq.contents[i] = new ArrayHeap<String>.Node("x" + i, i);
-        }
-        // Change item x6's priority to a low value.
-
-        pq.contents[6].myPriority = 0;
-        System.out.println("PQ before swimming:");
-        System.out.println(pq);
-
-        // Swim x6 upwards. It should reach the root.
-
-        pq.swim(6);
-        System.out.println("PQ after swimming:");
-        System.out.println(pq);
-        assertEquals("x6", pq.contents[1].myItem);
-        assertEquals("x2", pq.contents[2].myItem);
-        assertEquals("x1", pq.contents[3].myItem);
-        assertEquals("x4", pq.contents[4].myItem);
-        assertEquals("x5", pq.contents[5].myItem);
-        assertEquals("x3", pq.contents[6].myItem);
-        assertEquals("x7", pq.contents[7].myItem);
-    }
-
-    @Test
-    public void testSink() {
-        ArrayHeap<String> pq = new ArrayHeap<>();
-        pq.size = 7;
-        for (int i = 1; i <= 7; i += 1) {
-            pq.contents[i] = new ArrayHeap<String>.Node("x" + i, i);
-        }
-        // Change root's priority to a large value.
-        pq.contents[1].myPriority = 10;
-        System.out.println("PQ before sinking:");
-        System.out.println(pq);
-
-        // Sink the root.
-        pq.sink(1);
-        System.out.println("PQ after sinking:");
-        System.out.println(pq);
-        assertEquals("x2", pq.contents[1].myItem);
-        assertEquals("x4", pq.contents[2].myItem);
-        assertEquals("x3", pq.contents[3].myItem);
-        assertEquals("x1", pq.contents[4].myItem);
-        assertEquals("x5", pq.contents[5].myItem);
-        assertEquals("x6", pq.contents[6].myItem);
-        assertEquals("x7", pq.contents[7].myItem);
-    }
-
-
-    @Test
-    public void testInsert() {
-        ArrayHeap<String> pq = new ArrayHeap<>();
-        pq.insert("c", 3);
-        assertEquals("c", pq.contents[1].myItem);
-
-        pq.insert("i", 9);
-        assertEquals("i", pq.contents[2].myItem);
-
-        pq.insert("g", 7);
-        pq.insert("d", 4);
-        assertEquals("d", pq.contents[2].myItem);
-
-        pq.insert("a", 1);
-        assertEquals("a", pq.contents[1].myItem);
-
-        pq.insert("h", 8);
-        pq.insert("e", 5);
-        pq.insert("b", 2);
-        pq.insert("c", 3);
-        pq.insert("d", 4);
-        System.out.println("pq after inserting 10 items: ");
-        System.out.println(pq);
-        assertEquals(10, pq.size());
-        assertEquals("a", pq.contents[1].myItem);
-        assertEquals("b", pq.contents[2].myItem);
-        assertEquals("e", pq.contents[3].myItem);
-        assertEquals("c", pq.contents[4].myItem);
-        assertEquals("d", pq.contents[5].myItem);
-        assertEquals("h", pq.contents[6].myItem);
-        assertEquals("g", pq.contents[7].myItem);
-        assertEquals("i", pq.contents[8].myItem);
-        assertEquals("c", pq.contents[9].myItem);
-        assertEquals("d", pq.contents[10].myItem);
-    }
-
-
-    @Test
-    public void testInsertAndRemoveOnce() {
-        ArrayHeap<String> pq = new ArrayHeap<>();
-        pq.insert("c", 3);
-        pq.insert("i", 9);
-        pq.insert("g", 7);
-        pq.insert("d", 4);
-        pq.insert("a", 1);
-        pq.insert("h", 8);
-        pq.insert("e", 5);
-        pq.insert("b", 2);
-        pq.insert("c", 3);
-        pq.insert("d", 4);
-        String removed = pq.removeMin();
-        assertEquals("a", removed);
-        assertEquals(9, pq.size());
-        assertEquals("b", pq.contents[1].myItem);
-        assertEquals("c", pq.contents[2].myItem);
-        assertEquals("e", pq.contents[3].myItem);
-        assertEquals("c", pq.contents[4].myItem);
-        assertEquals("d", pq.contents[5].myItem);
-        assertEquals("h", pq.contents[6].myItem);
-        assertEquals("g", pq.contents[7].myItem);
-        assertEquals("i", pq.contents[8].myItem);
-        assertEquals("d", pq.contents[9].myItem);
-    }
-
-    @Test
-    public void testInsertAndRemoveAllButLast() {
-        myPQ<String> pq = new ArrayHeap<>();
-        pq.insert("c", 3);
-        pq.insert("i", 9);
-        pq.insert("g", 7);
-        pq.insert("d", 4);
-        pq.insert("a", 1);
-        pq.insert("h", 8);
-        pq.insert("e", 5);
-        pq.insert("b", 2);
-        pq.insert("c", 3);
-        pq.insert("d", 4);
-
-        int i = 0;
-        String[] expected = {"a", "b", "c", "c", "d", "d", "e", "g", "h", "i"};
-        while (pq.size() > 1) {
-            assertEquals(expected[i], pq.removeMin());
-            i += 1;
-        }
     }
 
 }

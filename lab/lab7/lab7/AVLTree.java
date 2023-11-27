@@ -1,38 +1,47 @@
-class Node {
-    int data;
-    int height;
-    Node left;
-    Node right;
-
-    public Node(int value) {
-        data = value;
-        height = 1;
-        left = right = null;
-    }
-}
+import java.util.Scanner;
 
 public class AVLTree {
-    public static int getHeight(Node node) {
+    static class Node {
+        int data;
+        int height;
+        Node left;
+        Node right;
+
+        public Node(int value) {
+            data = value;
+            height = 1;
+            left = null;
+            right = null;
+        }
+    }
+
+    private Node root;
+
+    public AVLTree() {
+        this.root = null;
+    }
+
+    private int getHeight(Node node) {
         if (node == null) {
             return 0;
         }
         return node.height;
     }
 
-    public static int getBalanceFactor(Node node) {
+    private int getBalanceFactor(Node node) {
         if (node == null) {
             return 0;
         }
         return getHeight(node.left) - getHeight(node.right);
     }
 
-    public static void updateHeight(Node node) {
+    private void updateHeight(Node node) {
         if (node != null) {
             node.height = Math.max(getHeight(node.left), getHeight(node.right)) + 1;
         }
     }
 
-    public static Node rightRotate(Node y) {
+    private Node rightRotate(Node y) {
         Node x = y.left;
         Node T2 = x.right;
 
@@ -45,7 +54,7 @@ public class AVLTree {
         return x;
     }
 
-    public static Node leftRotate(Node x) {
+    private Node leftRotate(Node x) {
         Node y = x.right;
         Node T2 = y.left;
 
@@ -58,7 +67,7 @@ public class AVLTree {
         return y;
     }
 
-    public static Node insert(Node root, int value) {
+    private Node insert(Node root, int value) {
         if (root == null) {
             return new Node(value);
         }
@@ -96,7 +105,11 @@ public class AVLTree {
         return root;
     }
 
-    public static void calculateAverageSearchLength(Node root, int depth, int[] nodesCount, int[] sumDepth) {
+    public void insert(int value) {
+        root = insert(root, value);
+    }
+
+    private void calculateAverageSearchLength(Node root, int depth, int[] nodesCount, int[] sumDepth) {
         if (root != null) {
             nodesCount[0]++;
             sumDepth[0] += depth;
@@ -106,20 +119,73 @@ public class AVLTree {
         }
     }
 
-    public static void main(String[] args) {
-        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-        int n = arr.length;
-
-        Node root = null;
-
-        for (int i = 0; i < n; i++) {
-            root = insert(root, arr[i]);
-        }
-
+    public void calculateAverageSearchLength() {
         int[] nodesCount = {0};
         int[] sumDepth = {0};
         calculateAverageSearchLength(root, 1, nodesCount, sumDepth);
+        double asl = (double) sumDepth[0] / nodesCount[0];
 
-        System.out.println("平均查找长度：" + (double) sumDepth[0] / nodesCount[0]);
+        System.out.println("ASL：" + (asl - 1.0));
+    }
+    @Override
+    public String toString() {
+        return toStringHelper(root, "");
+    }
+
+    /* Recursive helper method for toString. */
+    private String toStringHelper(Node node, String indent) {
+        if (node == null) {
+            return "";
+        } else {
+            String toReturn = "";
+            Node rightChild = node.right;
+            toReturn += toStringHelper(rightChild, "        " + indent);
+            if (rightChild != null) {
+                toReturn += indent + "    /";
+            }
+            //toReturn += "\n" + indent + node.data + " (Balance Factor: " + getBalanceFactor(node) + ")\n";
+            toReturn += "\n" + indent + node.data + "\n";
+            Node leftChild = node.left;
+            if (leftChild != null) {
+                toReturn += indent + "    \\";
+            }
+            toReturn += toStringHelper(leftChild, "        " + indent);
+            return toReturn;
+        }
+    }
+
+    public static void main(String[] args) {
+        AVLTree avlTree = new AVLTree();
+
+        // Input a sequence of integers and generate an AVL tree
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a sequence of integers (end with Enter):");
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine().trim();
+            if (line.isEmpty()) {
+                // Stop input if an empty line is entered
+                break;
+            }
+            try {
+                int num = Integer.parseInt(line);
+                avlTree.insert(num);
+
+
+                //Display each step
+                System.out.println("AVL Tree representation:");
+                System.out.println(avlTree);
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter integers only.");
+            }
+        }
+
+        // Display the AVL Tree
+        System.out.println("AVL Tree representation:");
+        System.out.println(avlTree);
+
+        avlTree.calculateAverageSearchLength();
     }
 }
+

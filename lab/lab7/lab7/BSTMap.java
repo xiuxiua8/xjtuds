@@ -1,18 +1,11 @@
-
-import com.sun.source.tree.ProvidesTree;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Scanner;
-
+import java.util.*;
 
 /**
- * Implementation of interface Map61B with BST as core data structure.
+ * Implementation of interface MyMap with BST as core data structure.
  *
  * @author Wang Zilong
  */
-public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
+public class BSTMap<K extends Comparable<K>, V> implements MyMap<K, V> {
 
     protected class Node {
         /* (K, V) pair stored in this Node. */
@@ -93,44 +86,6 @@ public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
         return ndptr;
     }
 
-    private Node gotoleft(Node node) {
-        Node ndptr = node.left;
-        if (ndptr == null) {
-            return null;
-        } else {
-            while (ndptr.right != null) {
-                ndptr = ndptr.right;
-            }
-            return ndptr;
-        }
-    }
-
-    private Node gotoright(Node node) {
-        Node ndptr = node.right;
-        if (ndptr == null) {
-            return null;
-        } else {
-            while (ndptr.left != null) {
-                ndptr = ndptr.left;
-            }
-            return ndptr;
-        }
-    }
-
-
-
-    private Node find(Node T, K sk) {
-        if (T == null) {
-            return null;
-        }
-        if (sk.equals(T.key)) {
-            return T;
-        } else if (sk.compareTo(T.key) < 0) {
-            return find(T.left, sk);
-        } else {
-            return find(T.right, sk);
-        }
-    }
 
     /** Returns the value mapped to by KEY in the subtree rooted in P.
      *  or null if this map contains no mapping for the key.
@@ -196,7 +151,6 @@ public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
             size += 1;
             return;
         }
-
         Node node = gotothebottom(root, key);
         //Node node = find(root, key);
         putHelper(key, value, node);
@@ -298,8 +252,6 @@ public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
             return null;
         }
     }
-
-
     @Override
     public Iterator<K> iterator() {
         //throw new UnsupportedOperationException();
@@ -307,14 +259,14 @@ public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
     }
 
     public void inOrderTraversal(Node root) {
-        if (root == null)  return;
+        if (root == null)  {
+            return;
+        }
         inOrderTraversal(root.left);
         root.visit();
         inOrderTraversal(root.right);
-
     }
 
-    // Add this method to your BSTMap class
     public double averageSearchLength() {
         if (root == null) {
             return 0.0;
@@ -331,24 +283,62 @@ public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
         if (node == null) {
             return 0;
         }
-
         return depth + calculateTotalDepth(node.left, depth + 1) + calculateTotalDepth(node.right, depth + 1);
     }
 
+    @Override
+    public String toString() {
+        return toStringHelper(root, "");
+    }
+
+    /* Recursive helper method for toString. */
+    private String toStringHelper(Node node, String indent) {
+        if (node == null) {
+            return "";
+        } else {
+            String toReturn = "";
+            Node rightChild = node.right;
+            toReturn += toStringHelper(rightChild, "        " + indent);
+            if (rightChild != null) {
+                toReturn += indent + "    /";
+            }
+            toReturn += "\n" + indent + node.key + "\n";
+            Node leftChild = node.left;
+            if (leftChild != null) {
+                toReturn += indent + "    \\";
+            }
+            toReturn += toStringHelper(leftChild, "        " + indent);
+            return toReturn;
+        }
+    }
+
+
 
     private class BSTIterator implements Iterator<K> {
-        private int currentIndex = 0;
-        //private Node[] Queue = new Node[16];
+        private LinkedList<Node> queue;
+
+        private BSTIterator() {
+            queue = new LinkedList<>();
+            inOrderTraversal(root);
+        }
+
+        private void inOrderTraversal(Node root) {
+            if (root == null) {
+                return;
+            }
+            inOrderTraversal(root.left);
+            queue.add(root);
+            inOrderTraversal(root.right);
+        }
 
         @Override
         public boolean hasNext() {
-            //return root.left == null || root.right == null;
-            return false;
+            return !queue.isEmpty();
         }
 
         @Override
         public K next() {
-            return root.key;
+            return queue.poll().key;
         }
 
     }
@@ -394,6 +384,7 @@ public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
     public static void main(String[] args) {
 
         BSTMap<Integer, Integer> bstmap = new BSTMap<>();
+
         // 1. Input a sequence of integers and generate a binary search tree
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter a sequence of integers (end with Enter):");
@@ -405,7 +396,6 @@ public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
                 // Stop input if an empty line is entered
                 break;
             }
-
             try {
                 int num = Integer.parseInt(line);
                 bstmap.put(num);
@@ -418,14 +408,17 @@ public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
         System.out.println("In-order traversal of the binary search tree:");
         bstmap.inOrderTraversal(bstmap.root);
 
+        // Display the binary tree
+        System.out.println("Binary Tree representation:");
+        System.out.println(bstmap);
+
         // 3. Calculate the average search length
         double avgSearchLength = bstmap.averageSearchLength();
         System.out.println("Average search length: " + avgSearchLength);
 
-
         // 4. Delete a node and perform in-order traversal
         System.out.println("Enter the element to be deleted:");
-        int elementToDelete = scanner.  nextInt();
+        int elementToDelete = scanner.nextInt();
         Integer removedValue = bstmap.remove(elementToDelete);
 
         if (removedValue != null) {
@@ -435,10 +428,11 @@ public class BSTMap<K extends Comparable<K>, V> implements myMap<K, V> {
         } else {
             System.out.println("Node with key " + elementToDelete + " not found.");
         }
+
+        // Display the binary tree
+        System.out.println("Binary Tree representation:");
+        System.out.println(bstmap);
     }
-
-
-
 
 }
 
