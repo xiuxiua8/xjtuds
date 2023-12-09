@@ -21,7 +21,7 @@ public class HuffmanCoding {
     private static Map<Character, String> huffmanCodes = new HashMap<>();
 
     public static void main(String[] args) {
-        String inputFileName = "interview.txt";
+        String inputFileName = "道路以目.txt";
         String compressedFileName = "compressed.bin";
         String decompressedFileName = "decompressed.txt";
 

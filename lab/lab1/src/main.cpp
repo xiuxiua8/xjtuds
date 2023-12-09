@@ -2,8 +2,7 @@
 #include "seqstack.cpp"
 #include "stuff.cpp"
 #include <string.h>
-//#include <vector>
-//#define vector std::vector<int> 
+#include <string>
 
 struct StackItem {
     int index;
@@ -89,15 +88,12 @@ void packup(Stuff<int>* set[], std::string log, int stuffnum, int T) {
     }
 
 }
-
-
-
-
-
-int main() {
-    int T = 10; //bagVolume
+int text() {
+        int T = 10; //bagVolume
     Stuff<int>* stuffSet[10];
     int stuffNum = 6;
+
+    std::string log = "solution:\n";
 
 
     stuffSet[0] = new Stuff<int>(1, 1);
@@ -105,23 +101,68 @@ int main() {
     stuffSet[2] = new Stuff<int>(4, 1);
     stuffSet[3] = new Stuff<int>(3, 1);
     stuffSet[4] = new Stuff<int>(5, 1);
-    stuffSet[5] = new Stuff<int>(2, 1, 5);
+    stuffSet[5] = new Stuff<int>(2, 1);
 
-    for (int i = 0; i < stuffNum - 1; i++) {
+    for (int i = 0; i < stuffNum; i++) {
         stuffSet[i]->write(i);  
     }
+}
 
+
+
+
+int main() {
+
+    int T; // bagVolume
+    int stuffNum;
     std::string log = "solution:\n";
+    Stuff<int>* stuffSet[100];
 
-    /*printf("Enter the number of items: ");
-    scanf("%d", &stuffNum);
+    std::cout << "Enter the number of items: ";
+    std::cin >> stuffNum;
 
-    printf("Enter the target volume T: ");
-    scanf("%d", &T);*/
+    std::cout << "Enter the size of each item: ";
+    for (int i = 0; i < stuffNum; i++) {
+        int size;
+        std::cin >> size;
+        stuffSet[i] = new Stuff<int>(size, 1); // input size, value is 1, message is the stuff's index
+        stuffSet[i]->write(i);
+    }
 
-    printf("Possible subsets that sum up to %d:\n", T);
+    std::cout << "Enter the target volume T: ";
+    std::cin >> T;
+
+    std::cout << "Possible solution that the sum is " << T << ":\n";
     packup(stuffSet, log, stuffNum, T);
-    printf("end! ");
+    std::cout << "end! ";
+
+    return 0;
+}
+
+
+int main0(int argc, char* argv[]) {
+    int T; // bagVolume
+    int stuffNum;
+    std::string log = "solution:\n";
+    Stuff<int>* stuffSet[100];
+
+    // Check if the correct number of command line arguments is provided
+    if (argc != 4) {
+        std::cerr << "Usage: " << argv[0] << " <num_items> <sizes> <target_volume>" << std::endl;
+        return 1;
+    }
+
+    // Parse command line arguments
+    stuffNum = std::stoi(argv[1]);
+    T = std::stoi(argv[3]);
+
+    // Initialize stuffSet array
+    for (int i = 0; i < stuffNum; i++) {
+        stuffSet[i] = new Stuff<int>(std::stoi(argv[2+i]), 1);
+        stuffSet[i]->write(i);
+    }
+
+    // Rest of your code remains unchanged
 
     return 0;
 }

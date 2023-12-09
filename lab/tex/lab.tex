@@ -336,7 +336,8 @@ Solution Path:
 
 \textbf{时间复杂度分析：}
 
-广度优先搜索的时间复杂度主要取决于状态的数量和图的边的数量。时间复杂度可以认为是$O(E)$，其中$E$是边的数量。
+广度优先搜索的时间复杂度主要取决于状态的数量和图的边的数量。
+时间复杂度可以认为是$O(E)$，其中$E$是边的数量。
 
 \textbf{空间复杂度分析：}
 
@@ -399,17 +400,35 @@ Solution Path:
 \subsection*{算法思想}
 
 \paragraph*{Binary Search Tree}
-基于二叉排序树（Binary Search Tree，BST）的映射实现（BSTMap）。
+基于二叉树（Binary Search Tree，BST）的映射实现（BSTMap）。
 
 \textbf{大致算法：}
 
-1. \textbf{生成二叉排序树（put）：} 通过递归向下搜索的方式找到合适的位置，插入新节点，保持二叉排序树的性质.
+1. \textbf{put：} 通过递归向下搜索的方式找到合适的位置，插入新节点.
 
-2. \textbf{删除节点（remove）：} 根据二叉排序树的性质，分情况删除节点：若无子节点，直接删除；若有一个子节点，将子节点移上来替代原节点；若有两个子节点，找到右子树中最小的节点替代.
+2. \textbf{remove：} 根据二叉排序树的性质，分情况删除节点：若无子节点，直接删除；若有一个子节点，将子节点移上来替代原节点；若有两个子节点，找到右子树中最小的节点替代.
 
-3. \textbf{中序遍历输出（inOrderTraversal）：} 通过递归实现中序遍历，即左子树 - 根节点 - 右子树的顺序输出.
+3. \textbf{inOrderTraversal：} 通过递归实现中序遍历.
 
-4. \textbf{计算查找成功的平均查找长度（averageSearchLength）：} 通过递归计算树中各节点的深度，然后计算平均深度.
+4. \textbf{averageSearchLength：} 通过递归计算树中各节点的深度，然后计算平均深度.
+
+\paragraph*{ArrayBinaryTree}
+
+基于顺序表（一维数组）的静态链表的二叉树（ArrayBinaryTree）。
+
+\textbf{大致算法：}
+
+1. \textbf{insert：} 使用递归方式向下搜索合适的位置，插入新节点，保持二叉排序树的性质。
+
+    $index of Lchild = 2 * i$, $index of Rchild = 2 * i + 1.$
+
+2. \textbf{inOrderTraversal：} 使用递归实现中序遍历。
+
+3. \textbf{averageSearchLength：} 通过递归计算树中各节点的深度，然后计算平均深度。
+
+4. \textbf{remove：} 利用辅助数组temp存储不需要删除的节点，然后以此顺序重新构建二叉排序树。
+
+6. \textbf{resize：} 动态调整数组大小.
 
 
 
@@ -421,13 +440,7 @@ Solution Path:
 \textbf{Input\&Output}
 \begin{verbatim}
     Enter a sequence of integers (end with Enter):
-    5
-    2
-    7
-    1
-    3
-    6
-    8
+    5    2    7    1    3    6    8
     
     In-order traversal of the binary search tree:
     key = 1
@@ -481,18 +494,238 @@ Solution Path:
 \end{verbatim}
 \end{exampleframe}
 
+\paragraph*{ArrayBinaryTree}
+\textbf{IO样例}
+\begin{exampleframe}
+\textbf{Input\&Output}
+\begin{verbatim}
+Enter a sequence of integers for the binary tree (end with Enter):
+5 12 4 8 7 9 6 1
 
+Binary Tree representation:
+
+        12
+            \
+                        9
+                    /
+                8
+                    \
+                        7
+                            \
+                                6
+    /
+5
+    \
+        4
+            \
+                1
+
+In-order traversal: 1 4 5 6 7 8 9 12 
+Average Search Length: 2.0
+Enter an integer to remove from the binary tree:
+8
+Binary Tree representation after removal:
+
+        12
+            \
+                        9
+                    /
+                7
+                    \
+                        6
+    /
+5
+    \
+        4
+            \
+                1
+
+In-order traversal: 1 4 5 6 7 9 12 
+
+\end{verbatim}
+\end{exampleframe}
+
+\paragraph*{AVLTree}
+\textbf{IO样例}
+\begin{exampleframe}
+\textbf{Input\&Output}
+\begin{verbatim}
+    Enter a sequence of integers (end with Enter):
+    1    2    3    4    5    6    7    8
+    AVL Tree representation: (step by step)
+    
+    1
+    
+
+    AVL Tree representation:
+            2
+        /
+    1
+    AVL Tree representation:
+            3
+        /
+    2
+        \
+            1
+    AVL Tree representation:
+                    4
+                /
+            3
+        /
+    2
+        \
+            1
+    AVL Tree representation:
+                    5
+                /
+            4
+                \
+                    3
+        /
+    2
+        \
+            1
+    AVL Tree representation:
+                    6
+                /
+            5
+        /
+    4
+        \
+                    3
+                /
+            2
+                \
+                    1
+    AVL Tree representation:
+    
+                    7
+                /
+            6
+                \
+                    5
+        /
+    4
+        \
+                    3
+                /
+            2
+                \
+                    1
+    AVL Tree representation:
+                            8
+                        /
+                    7
+                /
+            6
+                \
+                    5
+        /
+    4
+        \
+                    3
+                /
+            2
+                \
+                    1
+    ASL：1.625
+\end{verbatim}
+\end{exampleframe}
 \subsection*{时间空间复杂度}
 \paragraph*{Binary Search Tree}
+
+\begin{center}
+    \begin{tabular}{|l|r|r|} \hline
+        Method & Time & Space \\\hline
+        \textbf{put remove search} & $O(\log n)$ & $O(n)$ \\
+        \textbf{In-order traversal} & $O(n)$ & $O(n)$ \\ \hline
+    \end{tabular}
+\end{center}
+
+基于二叉树（Binary Search Tree，BST）的映射实现，其中$n$是二叉树的节点数。
+
 \textbf{时间复杂度：}
-- 插入、查找、删除节点的平均时间复杂度为$O(\log n)$，其中$n$是二叉排序树的节点数.
-- 中序遍历的时间复杂度为$O(n)$，其中$n$是二叉排序树的节点数.
+
+1. \textbf{插入、查找、删除}节点的平均时间复杂度为$O(\log n)$.
+
+2. \textbf{中序遍历}的时间复杂度为$O(n)$.
 
 \textbf{空间复杂度：}
-- 每个节点占用常数空间，空间复杂度为$O(n)$，其中$n$是二叉排序树的节点数.
+每个节点占用常数空间，空间复杂度为$O(n)$.
 
+\paragraph*{ArrayBinaryTree}
+
+\begin{center}
+    \begin{tabular}{|l|r|r|r|} \hline
+        Method & Time & Space worstCase & Space bestCase\\\hline
+        \textbf{search} & $O(\log n)$ & $-$ & $O(\log n)$ \\
+        \textbf{put} & $O(\log n)$ & $O(2^n)$ & $O(1)$ \\
+        \textbf{create remove} & $O(n\log n)$ & $O(2^n)$ & $O(n)$ \\
+        \textbf{In-order traversal} & $O(n)$ & $O(n)$ & $O(n)$ \\ \hline
+    \end{tabular}
+\end{center}
+
+静态链表采用数组实现，其中$n$是二叉排序树的节点数。
+
+\textbf{时间复杂度：}
+
+1. \textbf{插入、查找、删除节点}的平均时间复杂度为$O(\log n)$.
+
+2. \textbf{中序遍历}的时间复杂度为$O(n)$.
+
+\textbf{空间复杂度：}
+
+1. \textbf{最好情况}——插入顺序为二叉树层次遍历序列，则空间利用率高，空间复杂度为$O(n)$。
+
+2. \textbf{最坏情况}——插入顺序有序，大量空间闲置，静态链表空间复杂度为$O(2^n)$
+
+
+
+
+\paragraph*{AVL Tree}
+
+
+以下是AVL树各个操作的时间复杂度分析：
+
+\begin{center}
+    \begin{tabular}{|l|r|r|} \hline
+        Method & Time & Space \\\hline
+        \textbf{Insert} & $O(\log n)$ & $O(n)$ \\
+        \textbf{remove} & $O(\log n)$ & $O(n)$ \\
+        \textbf{Search} & $O(\log n)$ & $O(n)$ \\
+        \textbf{In-order traversal} & $O(n)$ & $O(n)$ \\ \hline
+    \end{tabular}
+\end{center}
+
+1. \textbf{插入操作 (Insertion):}
+
+   插入操作的平均时间复杂度和最坏情况时间复杂度都是$O(\log n)$。插入节点后，需要进行旋转以保持平衡。旋转次数小于$O(\log n)$。
+   
+2. \textbf{删除操作 (Deletion):}
+
+   删除操作的平均时间复杂度和最坏情况时间复杂度同样是$O(\log n)$。删除节点后，需要进行树的旋转操作以维持平衡。
+
+3. \textbf{查找操作 (Search):}
+
+   因为AVL树是一棵平衡树，查找操作的平均时间复杂度和最坏情况时间复杂度都是$O(\log n)$。
 
 \subsection*{优化分析}
+
+\textbf{亮点：}所有的树都写了tostring方法，方便输出树的存储结构。
+
+\paragraph*{Binary Search Tree}
+整体性能很好。还支持BSTmap，还可以存储key value pair.
+
+\paragraph*{ArrayBinaryTree}
+ 这是一个很差的结构。
+
+\textbf{改进：}随着节点数量的增加，可能需要频繁进行数组的扩展操作，这会导致性能下降。而且delete操作的性能很差，所以这种结构不合理。
+应考虑使用其他数据结构来避免数组大小调整的开销。
+
+
+\paragraph*{AVL Tree}
+由于时间原因，只写了满足实验要求的大部分功能，还不支持删除等功能，但是其他方法性能还不错。
+
 
 \newpage
 \section*{lab11. 哈夫曼编码}
@@ -524,42 +757,104 @@ Solution Path:
 
 \end{abstract}
 
-\begin{qparts}
-    \item 题目分析
-
-
-    
-\end{qparts}
-
-
 
 \subsection*{算法思想}
 
-\begin{Solutions}
-\begin{enumerate} % for numbers
-\item 1
-ArrayDeque.java
-\begin{lstlisting}
+1. \textbf{构建哈夫曼树：} 通过读取输入文件内容，统计字符频率，然后构建哈夫曼树。哈夫曼树的构建采用优先队列（PriorityQueue），每次从队列中取出两个频率最小的节点，合并成一个新节点，然后将新节点放回队列中，直至队列中只有一个节点，即根节点。
 
-\end{lstlisting}
+2. \textbf{生成哈夫曼编码：} 通过递归遍历哈夫曼树，给每个叶子节点赋予对应的哈夫曼编码（0 或 1）。
 
-\item 2
+3. \textbf{压缩文件：} 遍历原文件中的每个字符，使用生成的哈夫曼编码替换原字符，形成压缩后的文件。同时，保存哈夫曼树结构以便解压缩。
 
-\begin{lstlisting}
+4. \textbf{解压文件：} 读取压缩文件和保存的哈夫曼树结构，根据哈夫曼编码进行解压还原。
 
-\end{lstlisting}
+\subsubsection*{步骤：}
 
+1. \textbf{构建哈夫曼树：}
+   \begin{itemize}
+       \item 统计字符频率，并构建优先队列。
+       \item 通过队列构建哈夫曼树。
+   \end{itemize}
 
-\end{enumerate}
-\end{Solutions}
+2. \textbf{生成哈夫曼编码：}
+   \begin{itemize}
+       \item 递归遍历哈夫曼树，为每个叶子节点生成哈夫曼编码。
+   \end{itemize}
 
+3. \textbf{压缩文件：}
+   \begin{itemize}
+       \item 使用生成的哈夫曼编码替换原文件字符。
+       \item 保存哈夫曼树结构至压缩文件。
+   \end{itemize}
+
+4. \textbf{解压文件：}
+   \begin{itemize}
+       \item 读取压缩文件和保存的哈夫曼树结构。
+       \item 根据哈夫曼编码进行解压。
+   \end{itemize}
 
 
 \subsection*{输入输出数据集}
 
+\textbf{IO样例}
+
+\begin{figure}[htbp] 
+  \centering
+  \includegraphics[width=0.9\textwidth]{input.png} % 图片的宽度占正文宽度的50%
+  \caption{Input}
+  \label{fig:Input}
+\end{figure}
+
+
+\begin{figure}[htbp] 
+    \centering
+    \includegraphics[width=0.9\textwidth]{output.png} % 图片的宽度占正文宽度的50%
+    \caption{Output}
+    \label{fig:Output}
+\end{figure}
+
 \subsection*{时间空间复杂度}
 
+$n$ 是字符的种类数，$m$ 是文件中的字符总数，
+
+\begin{center}
+    \begin{tabular}{|l|r|r|} \hline
+        Method & Time & Space \\\hline
+        \textbf{readFile} & $O(n \log n)$ &  $O(n)$  \\
+        \textbf{generateHuffmanCodes} & $O(n)$ & $O(n)$ \\
+        \textbf{compressFile} & $O(m)$ & $O(1)$ \\ 
+        \textbf{decompressFile} & $O(m)$ & $O(1)$ \\\hline
+    \end{tabular}
+\end{center}
+
+\textbf{时间复杂度分析：}
+
+1 \textbf{构建哈夫曼树：} $O(n \log n)$ - $n$ 是字符的种类数，构建优先队列的时间复杂度为 $O(n \log n)$。
+
+2 \textbf{生成哈夫曼编码：} $O(n)$ - 递归遍历哈夫曼树，对每个叶子节点生成编码。
+
+3 \textbf{压缩文件：} $O(m)$ - 遍历文件一次。
+
+4 \textbf{解压文件：} $O(m)$ - 遍历压缩文件一次。
+
+\textbf{空间复杂度分析：}
+
+1 \textbf{构建哈夫曼树：} $O(n)$ - 存储字符频率和哈夫曼树节点。
+
+2 \textbf{生成哈夫曼编码：} $O(n)$ - 递归调用时的栈空间。
+
+3 \textbf{压缩文件：} $O(1)$ - 除了原文件和压缩文件外，主要占用空间的是哈夫曼树结构。
+
+4 \textbf{解压文件：} $O(1)$ - 除了压缩文件和解压文件外，主要占用空间的是哈夫曼树结构。
+
+
 \subsection*{优化分析}
+
+1. \textbf{文件分块压缩：} 对于大文件，可以分块压缩，减少内存占用。
+
+2. \textbf{多线程处理：} 在压缩和解压的过程中，可以使用多线程提高处理速度。
+
+3. \textbf{自适应编码：} 使用自适应编码，动态更新字符频率，适应文件内容的变化。
 
 \newpage
 \section*{lab13. 迷宫}
@@ -593,31 +888,89 @@ ArrayDeque.java
 
 \subsection*{算法思想}
 
-\begin{Solutions}
-\begin{enumerate} % for numbers
-\item 1
-ArrayDeque.java
-\begin{lstlisting}
+\textbf{解题思想：}
 
-\end{lstlisting}
+通过深度优先搜索（DFS）解决。
+主要思路是从起点开始，按照上、下、左、右的顺序尝试移动，每次移动都标记当前位置，直到找到通路或者无法再移动。如果找到通路，则标记为成功路径，否则标记为死胡同。
 
-\item 2
-
-\begin{lstlisting}
-
-\end{lstlisting}
-
-
-\end{enumerate}
-\end{Solutions}
-
+\textbf{算法步骤：}
+\begin{itemize}
+    \item 从入口开始，调用\texttt{findWay}函数。
+    \item 在\texttt{findWay}函数中，首先检查当前位置是否是终点，如果是则返回\texttt{true}。
+    \item 然后检查当前位置是否是阻塞点，如果是则返回\texttt{false}。
+    \item 如果当前位置既不是终点也不是阻塞点，将当前位置标记为已经走过（用2表示），然后递归调用\texttt{findWay}函数，依次尝试上、下、左、右四个方向。
+    \item 如果在某个方向找到了通路，则将当前位置标记为成功路径（用6表示），并返回\texttt{true}。
+    \item 如果在所有方向都没有找到通路，则将当前位置标记为死胡同（用4表示），并返回\texttt{false}。
+    \item 在主函数中，如果\texttt{findWay}返回\texttt{true}，则输出迷宫解决方案，否则输出"there is no way out!"。
+\end{itemize}
 
 
 \subsection*{输入输出数据集}
 
+\textbf{IO样例}
+
+\begin{exampleframe}
+\textbf{Input:}
+\begin{verbatim}
+    initial Matrix
+    ■■■■■■■■■■
+    ■         ■■  ☆
+    ■■■  ■        ■
+    ■■    ■■  ■■■
+    ■■  ■■■■■■■
+    ■■  ■■■■■■■
+    ■            ■ ■
+    ■★■■■■      ■
+    ■  ■■■■■■■■
+    ■■■■■■■■■■
+\end{verbatim}
+\textbf{Output:}
+\begin{verbatim}
+    the solution
+    ■■■■■■■■■■
+    ■    ▲▲▲■■▲☆
+    ■■■▲■▲▲▲▲■
+    ■■▲▲■■ ■■■
+    ■■▲■■■■■■■
+    ■■▲■■■■■■■
+    ■▲▲        ■  ■
+    ■▲■■■■      ■
+    ■  ■■■■■■■■
+    ■■■■■■■■■■
+\end{verbatim}
+
+\end{exampleframe}
 \subsection*{时间空间复杂度}
 
+假设迷宫的大小，$m$为行数，$n$为列数。
+
+\begin{center}
+    \begin{tabular}{|l|r|r|} \hline
+        Method & Time & Space \\\hline
+        \textbf{packup} & $O(m \times n)$ & $O(m \times n)$\\ \hline
+    \end{tabular}
+\end{center}
+
+
+\textbf{时间复杂度：}
+
+在最坏情况下，需要遍历迷宫的每一个点，时间复杂度为$O(m \times n)$。
+
+\textbf{空间复杂度：}
+
+递归调用时，需要消耗系统调用栈的空间，最大深度取决于迷宫的大小。空间复杂度为$O(m \times n)$。
+
+
 \subsection*{优化分析}
+
+\textbf{亮点：}
+
+\textbf{迷宫生成器：} 利用随机函数，生成一个给定大小矩阵的迷宫。
+
+\textbf{改进点：}
+
+\textbf{可视化界面：} 通过图形化界面展示迷宫和搜索过程，使得结果更直观。这可以通过引入图形库来实现。
+
 
 \iffalse
 \fi
