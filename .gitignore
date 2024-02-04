@@ -1,0 +1,22 @@
+*.log
+*.exe
+*.fls
+*.aux
+*.fdb_latexmk
+.idea/
+out/
+.vscode/
+*.iml
+ds/
+*.gz
+lab/lab11/compressed.bin
+lab/lab11/compressed.bin.tree
+lab/lab11/decompressed.txt
+lab/lab1/src/gui.py
+./lab/\347\216\213\345\255\220\351\232\2062221411126 cs2204.pdf
+./\347\216\213\345\255\220\351\232\2062221411126 cs2204.rar
+*.pdf 
+*.rar
+lab/lab13/src/maze.txt
+
+
